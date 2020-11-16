@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+
+import 'antd/dist/antd.css'
+import './App.css'
+
+import { NetBoxPage } from './Pages'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/box" component={NetBoxPage} />
+          <Route exact path="/" component={NetBoxPage} />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
 
-export default App;
+export default App
