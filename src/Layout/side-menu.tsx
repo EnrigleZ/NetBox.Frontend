@@ -2,14 +2,14 @@ import React from 'react'
 import { RouteComponentProps, withRouter, Link } from 'react-router-dom'
 
 import { Layout, Menu } from 'antd'
-import { getSelectedKeys, MenuItemConfig } from './side-menu-items'
+import { MenuItemConfig, getMenuItemKey, getSelectedKeys } from './side-menu-items'
 
 const { Sider } = Layout
 
 function mapItemToElement(item: any) {
   const { path, icon, title, children } = item
-  const key = `${path}_${title}`
-  // return title
+  const key = getMenuItemKey(path, title)
+
   if (children) { // contains sub item
     return (
       <Menu.SubMenu key={key} title={title} icon={icon} >

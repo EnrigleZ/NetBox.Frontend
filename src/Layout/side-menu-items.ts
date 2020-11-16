@@ -12,6 +12,10 @@ type MenuItemType = {
   key?: string
 }
 
+export const getMenuItemKey = (path?: string, title?: string) => {
+  return `${path}_${title}`
+}
+
 export const MenuItemConfig: Array<MenuItemType> = [{
     path: 'box',
     icon: React.createElement(DesktopOutlined),
@@ -38,7 +42,8 @@ export function getSelectedKeys (pathname: string, items: Array<MenuItemType> ) 
 
   for (let i = 0; i < n; ++ i) {
     const { title, path, children } = items[i]
-    const key = `${path}_${title}`
+    const key = getMenuItemKey(path, title)
+
     if (children) {
       ret.push(...getSelectedKeys(pathname, children))
     } else if (path === pathname) {
