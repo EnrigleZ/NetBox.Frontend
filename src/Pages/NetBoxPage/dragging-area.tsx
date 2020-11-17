@@ -9,26 +9,35 @@ type TooltipWrapperProps = {
 const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({display}) => {
   const className = 'covered drop-tooltip faded'
   const ref = React.useRef<HTMLDivElement>(null)
-  const [hidden, setHidden] = React.useState<boolean>(true)
+  // const [hidden, setHidden] = React.useState<boolean>(true)
 
-  const element = ref.current
+  const TRANSITION_TIMEOUT = 300  
 
   useEffect(() => {
-    let timeout: any
+    let timeout: NodeJS.Timeout
+    const element = ref.current
+    if (!element) return
 
     if (!display) {
-      element?.classList.add('animate')
+      // display -> hide, which means to stop dragging
+      element.classList.add('faded')
+      timeout = setTimeout(() => {
+        element.classList.add('hidden')
+      }, TRANSITION_TIMEOUT)
     } else {
-
+      // hide -> display, which means to start dragging
+      element.classList.remove('hidden')
+      element.classList.remove('faded')
     }
 
     return function () {
-      clearTimeout(timeout)
+      timeout && clearTimeout(timeout)
     }
-  }, [display, setHidden])
+  }, [display, ref])
+
 
   return (
-    <div className={className} ref={ref} hidden={hidden}>
+    <div className={className} ref={ref}>
 
     </div>
   )

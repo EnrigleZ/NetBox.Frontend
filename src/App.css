@@ -24,5 +24,16 @@ body {
   width: 100%;
   height: 100%;
   z-index: 10000;
-  background-color: rgba(0, 64, 128, 0.3);
+}
+
+.drop-tooltip {
+  background-color: rgba(0, 64, 255, 0.3);
+  transition: all 300ms ease-in-out;
+  z-index: 10000;
+}
+.drop-tooltip.faded {
+  background-color: transparent;
+}
+.drop-tooltip.hidden {
+  z-index: -1;
 }
