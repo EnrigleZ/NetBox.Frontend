@@ -5,7 +5,7 @@ import 'antd/dist/antd.css'
 import './App.css'
 
 import MyLayout from './Layout'
-import { NetBoxPage } from './Pages'
+import { NetBoxPage, TestPage } from './Pages'
 import Layout from 'antd/lib/layout/layout'
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
       <BrowserRouter>
         <MyLayout>
           <Switch>
+            <Route exact path="/test-path" component={TestPage} />
             <Route exact path="/box" component={NetBoxPage} />
             <Route exact path="/" component={NetBoxPage} />
           </Switch>

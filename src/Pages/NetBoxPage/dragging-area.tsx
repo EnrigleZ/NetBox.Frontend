@@ -1,5 +1,7 @@
-import { Button, Card } from 'antd'
 import React, { FunctionComponent, useEffect } from 'react'
+import { Button, Card } from 'antd'
+import axios from 'axios'
+
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
 
 type TooltipWrapperProps = {
@@ -45,11 +47,16 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({d
 
 const NetBoxFunctionArea: FunctionComponent<ReceivedComponentProps> = (props) => {
   const { isDragging } = props
+  const onClick: any = () => {
+    axios.get('/test/').then(res => {
+      console.log(res)
+    })
+  }
   return (
     <>
       <DropFileTooltipWrapper display={isDragging} />
       <Card>
-        <Button>Whoa</Button>
+        <Button onClick={onClick}>Create</Button>
       </Card>
     </>
   )

@@ -1,3 +1,4 @@
 import NetBoxPage from './NetBoxPage'
+import TestPage from './TestPage'
 
-export { NetBoxPage }
+export { NetBoxPage, TestPage }
