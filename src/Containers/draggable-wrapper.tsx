@@ -24,9 +24,11 @@ export function withDraggable (Comp: React.FunctionComponent<ReceivedComponentPr
       function dropListener (event: DragEvent) {
         const files = event.dataTransfer?.files
         event.preventDefault()
-        if (files && files.length && handleDrop) {
+        if (files && files.length) {
           setDraggingCount(c => c - 1)
-          handleDrop(files)
+          handleDrop && handleDrop(files)
+        } else {
+          setDraggingCount(0)
         }
       }
 
