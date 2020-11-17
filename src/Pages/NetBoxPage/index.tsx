@@ -1,26 +1,37 @@
 import React, { FunctionComponent } from 'react'
-import { Button } from 'antd'
+import { Modal } from 'antd'
 
 import NetBoxFunctionArea from './dragging-area'
+import { fileList2Array, readFilesFromDragging } from './logic'
+import { HeartOutlined } from '@ant-design/icons'
 
 type NetBoxProps = {
   title?: String
 }
 
 const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
-  const handleFileDrop = (files: FileList) => {
-    const n = files.length
-    if (!n) return 
-    
-    for (let i = 0; i < n; ++ i) {
-      const reader = new FileReader()
-      reader.onload = function (e) {
-        const text = e.target?.result
-        console.log(text)
-      }
-      
-      reader.readAsText(files[i])
-    }
+  const handleFileDrop = (fileList: FileList) => {
+    const n = fileList.length
+    if (!n) return
+
+    const files = fileList2Array(fileList)
+
+    Modal.warning({
+      title: `Confirm to upload ${n} file${n === 1 ? '' : 's'}`,
+      content: (
+        <div>
+          {
+            files.map(file => (
+              <div key={file.name}>{file.name}</div>
+            ))
+          }
+        </div>
+      ),
+      onOk: () => {
+        readFilesFromDragging(files)},
+      onCancel: () => {},
+      icon: <HeartOutlined />
+    })
   }
 
   return (
