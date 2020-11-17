@@ -8,10 +8,19 @@ const TestPage: FunctionComponent<any> = () => {
       console.log(res.data)
     })
   }
+  const createOneCallback = () => {
+    const body = {
+      title: 'sample_title',
+      content: 'sample_content with more than seven words.'
+    }
+    Axios.post('/test/', body).then(res => {
+      console.log(res.data)
+    })
+  }
   return (
     <div className="test-page">
       <Card>
-        <Button>Add one</Button>
+        <Button onClick={createOneCallback}>Add one</Button>
         <Button onClick={getAllCallback}>Get all</Button>
       </Card>
     </div>
