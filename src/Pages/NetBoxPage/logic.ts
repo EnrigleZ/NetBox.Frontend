@@ -1,3 +1,5 @@
+import Axios from "axios"
+
 export function fileList2Array(fileList: FileList) {
   const ret = []
   const n = fileList.length
@@ -18,4 +20,16 @@ export function readFilesFromDragging(files: Array<File>) {
     
     reader.readAsText(files[i])
   }
+}
+
+export function asyncUploadFiles(files: Array<File>) {
+  return Promise.all(files.map(file => {
+    return new Promise((resolve) => {
+      const formData = new FormData()
+      formData.append('file_part', file)
+      Axios.post('/test/',  formData).then(res => {
+        resolve(res.data)
+      })
+    })
+  }))
 }

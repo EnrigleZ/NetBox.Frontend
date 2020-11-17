@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react'
 import { Modal } from 'antd'
 
 import NetBoxFunctionArea from './dragging-area'
-import { fileList2Array, readFilesFromDragging } from './logic'
+import { asyncUploadFiles, fileList2Array, readFilesFromDragging } from './logic'
 import { HeartOutlined } from '@ant-design/icons'
 
 type NetBoxProps = {
@@ -28,7 +28,10 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
         </div>
       ),
       onOk: () => {
-        readFilesFromDragging(files)},
+        asyncUploadFiles(files).then(results => {
+          console.log(results)
+        })
+      },
       onCancel: () => {},
       icon: <HeartOutlined />
     })
