@@ -26,8 +26,10 @@ export function asyncUploadFiles(files: Array<File>) {
   return Promise.all(files.map(file => {
     return new Promise((resolve) => {
       const formData = new FormData()
-      formData.append('file_part', file)
-      Axios.post('/test/',  formData).then(res => {
+      formData.append('file_content', file)
+      formData.append('name', 'sample-name')
+      formData.append('description', 'sample-description with more than eight words.')
+      Axios.post('/box-file/',  formData).then(res => {
         resolve(res.data)
       })
     })
