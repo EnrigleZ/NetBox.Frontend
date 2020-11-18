@@ -29,7 +29,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
 
     const files = fileList2Array(fileList)
 
-    Modal.warning({
+    Modal.confirm({
       title: `Confirm to upload ${n} file${n === 1 ? '' : 's'}`,
       content: (
         <div>
@@ -43,6 +43,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
       onOk: () => {
         asyncUploadFiles(files).then(results => {
           console.log(results)
+          getBoxFiles()
         })
       },
       onCancel: () => {},
@@ -55,6 +56,8 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
       <DraggingArea
         handleDrop={handleFileDrop}
         boxFiles={boxFiles}
+        refreshBoxFiles={getBoxFiles}
+        confirmUpload={handleFileDrop}
       />
     </div>
   )

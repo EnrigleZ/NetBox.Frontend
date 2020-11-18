@@ -1,9 +1,15 @@
 import React, { FunctionComponent, useEffect } from 'react'
 import { Button, Card, Table } from 'antd'
-import axios from 'axios'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
+import { DeleteBoxFilesAPI } from './api'
 import { boxFileTableColumns } from './logic'
+
+type NetBoxFunctionAreaProps = {
+  boxFiles: Array<BoxFileType>,
+  refreshBoxFiles: Function,
+  confirmUpload: Function
+}
 
 type TooltipWrapperProps = {
   display: boolean
@@ -56,15 +62,12 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({d
   )
 }
 
-type NetBoxFunctionAreaProps = {
-  boxFiles: Array<BoxFileType>
-}
-
 const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedComponentProps> = (props) => {
-  const { isDragging, boxFiles } = props
+  const { isDragging, boxFiles, refreshBoxFiles } = props
   const onClick: any = () => {
-    axios.delete('/box/box-files').then(res => {
+    DeleteBoxFilesAPI().then(res => {
       console.log(res.data)
+      refreshBoxFiles()
     })
   }
   return (
