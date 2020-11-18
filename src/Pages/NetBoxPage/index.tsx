@@ -3,7 +3,7 @@ import { Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
 import { DraggingArea, BoxFileType } from './dragging-area'
-import { asyncUploadFiles, fileList2Array, readFilesFromDragging } from './logic'
+import { asyncUploadFiles, fileList2Array } from './logic'
 import { GetBoxFilesAPI } from './api'
 
 
@@ -21,7 +21,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
     })
   }, [setBoxFiles])
 
-  React.useEffect(getBoxFiles, [setBoxFiles])
+  React.useEffect(getBoxFiles, [setBoxFiles, getBoxFiles])
 
   const handleFileDrop = (fileList: FileList) => {
     const n = fileList.length
