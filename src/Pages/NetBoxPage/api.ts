@@ -14,3 +14,10 @@ export const DeleteBoxFilesAPI = async () => {
     const ret = Axios.delete('/box/box-files')
     return ret
 }
+
+export const PostDownloadBoxFileAPI = async (data: object) => {
+    const ret = Axios.post('/box/download', data, {
+        responseType: "blob"
+    })
+    return ret
+}
