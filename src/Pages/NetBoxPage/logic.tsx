@@ -30,7 +30,12 @@ export const boxFileTableColumns = [
     render: (record: any) => (<a onClick={() => {
       const data = new FormData()
       data.append('id', record.id)
-      PostDownloadBoxFileAPI(data).then(res => {
+      const config = {
+        onUploadProgress: (e: any) => {
+          console.log(e)
+        }
+      }
+      PostDownloadBoxFileAPI(data, config).then(res => {
         // const url = window.URL.createObjectURL(new Blob([res.data]));
         // const link = document.createElement('a');
         // link.href = url;
