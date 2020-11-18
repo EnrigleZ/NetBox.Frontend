@@ -1,11 +1,22 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import { Button, Card } from 'antd'
+import { Button, Card, Table } from 'antd'
 import axios from 'axios'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
+import { boxFileTableColumns } from './logic'
 
 type TooltipWrapperProps = {
   display: boolean
+}
+
+export type BoxFileType = {
+  id: string,
+  name?: string
+  description?: string,
+  author?: string,
+  created_at?: number,
+  updated_at?: number,
+  size: number
 }
 
 const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({display}) => {
@@ -13,7 +24,7 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({d
   const ref = React.useRef<HTMLDivElement>(null)
   // const [hidden, setHidden] = React.useState<boolean>(true)
 
-  const TRANSITION_TIMEOUT = 300  
+  const TRANSITION_TIMEOUT = 300
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
@@ -45,21 +56,30 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({d
   )
 }
 
-const NetBoxFunctionArea: FunctionComponent<ReceivedComponentProps> = (props) => {
-  const { isDragging } = props
+type NetBoxFunctionAreaProps = {
+  boxFiles: Array<BoxFileType>
+}
+
+const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedComponentProps> = (props) => {
+  const { isDragging, boxFiles } = props
   const onClick: any = () => {
-    axios.get('/test/').then(res => {
-      console.log(res)
+    axios.delete('/box/box-files').then(res => {
+      console.log(res.data)
     })
   }
   return (
     <>
       <DropFileTooltipWrapper display={isDragging} />
       <Card>
-        <Button onClick={onClick}>Create</Button>
+        <Button onClick={onClick}>Clean</Button>
+        <Table
+          dataSource={boxFiles}
+          columns={boxFileTableColumns}
+          rowKey='id'
+        />
       </Card>
     </>
   )
 } 
 
-export default withDraggable(NetBoxFunctionArea)
+export const DraggingArea = withDraggable<NetBoxFunctionAreaProps>(NetBoxFunctionArea)

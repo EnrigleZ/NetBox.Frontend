@@ -1,15 +1,28 @@
 import React, { FunctionComponent } from 'react'
 import { Modal } from 'antd'
-
-import NetBoxFunctionArea from './dragging-area'
-import { asyncUploadFiles, fileList2Array, readFilesFromDragging } from './logic'
 import { HeartOutlined } from '@ant-design/icons'
+
+import { DraggingArea, BoxFileType } from './dragging-area'
+import { asyncUploadFiles, fileList2Array, readFilesFromDragging } from './logic'
+import { GetBoxFilesAPI } from './api'
+
 
 type NetBoxProps = {
   title?: String
 }
 
 const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
+  const [boxFiles, setBoxFiles] = React.useState<Array<BoxFileType>>([])
+
+  const getBoxFiles = React.useCallback(() => {
+    GetBoxFilesAPI().then(({ data }) => {
+      console.log('GetBoxFilesAPI:', data)
+      setBoxFiles(data)
+    })
+  }, [setBoxFiles])
+
+  React.useEffect(getBoxFiles, [setBoxFiles])
+
   const handleFileDrop = (fileList: FileList) => {
     const n = fileList.length
     if (!n) return
@@ -39,7 +52,10 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
 
   return (
     <div className="net-box-page">
-      <NetBoxFunctionArea handleDrop={handleFileDrop} />
+      <DraggingArea
+        handleDrop={handleFileDrop}
+        boxFiles={boxFiles}
+      />
     </div>
   )
 }
