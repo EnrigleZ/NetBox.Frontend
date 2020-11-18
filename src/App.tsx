@@ -6,7 +6,6 @@ import './App.css'
 
 import MyLayout from './Layout'
 import { NetBoxPage, TestPage } from './Pages'
-import Layout from 'antd/lib/layout/layout'
 
 function App() {
   return (

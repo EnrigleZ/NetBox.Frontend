@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react'
+import React from 'react'
 
 type WrappedComponentProps = {
   onDrag?: Function,
@@ -13,8 +13,8 @@ export type ReceivedComponentProps = {
   isDragging: boolean
 }
 
-export function withDraggable (Comp: React.FunctionComponent<ReceivedComponentProps>) {
-  const DraggableComponent: React.FunctionComponent<WrappedComponentProps> = (props) => {
+export function withDraggable<T> (Comp: React.FunctionComponent<ReceivedComponentProps & T>) {
+  const DraggableComponent: React.FunctionComponent<WrappedComponentProps & T> = (props) => {
     const { handleDrop, children } = props
 
     const containerRef = React.useRef<HTMLDivElement>(null)
