@@ -6,7 +6,11 @@ export const GetBoxFilesAPI = async () => {
 }
 
 export const PostBoxFileAPI = async (data: FormData) => {
-    const ret = Axios.post('/box/box-file', data)
+    const ret = Axios.post('/box/box-file', data, {
+        onUploadProgress: (progressEvent) => {
+            console.log(progressEvent)
+        }
+    })
     return ret
 }
 
@@ -17,7 +21,10 @@ export const DeleteBoxFilesAPI = async () => {
 
 export const PostDownloadBoxFileAPI = async (data: object) => {
     const ret = Axios.post('/box/download', data, {
-        responseType: "blob"
+        responseType: "blob",
+        onDownloadProgress: (progressEvent) => {
+            console.log(progressEvent)
+        }
     })
     return ret
 }

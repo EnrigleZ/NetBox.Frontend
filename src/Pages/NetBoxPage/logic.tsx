@@ -31,12 +31,12 @@ export const boxFileTableColumns = [
       const data = new FormData()
       data.append('id', record.id)
       PostDownloadBoxFileAPI(data).then(res => {
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', record.name); //or any other extension
-        document.body.appendChild(link);
-        link.click();
+        // const url = window.URL.createObjectURL(new Blob([res.data]));
+        // const link = document.createElement('a');
+        // link.href = url;
+        // link.setAttribute('download', record.name); //or any other extension
+        // document.body.appendChild(link);
+        // link.click();
       })
     }}>{record.name}</a>)
   },
