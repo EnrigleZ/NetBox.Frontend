@@ -29,7 +29,7 @@ export function asyncUploadFiles(files: Array<File>) {
       formData.append('file_content', file)
       formData.append('name', 'sample-name')
       formData.append('description', 'sample-description with more than eight words.')
-      Axios.post('/box-file/',  formData).then(res => {
+      Axios.post('/box/box-file',  formData).then(res => {
         resolve(res.data)
       })
     })
