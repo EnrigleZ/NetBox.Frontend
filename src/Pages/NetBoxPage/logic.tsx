@@ -102,34 +102,35 @@ function downloadFromResult(res: AxiosResponse, filename?: string) {
   link.click()
 }
 
+function downloadCallback (record: BoxFileLoadingType) {
+  const { name, id } = record
+  if (!id) return
+  const data = new FormData()
+  data.append('id', id)
+
+  record.load_type = 'download'
+  record.status = 'loading'
+  record.loaded_size = 0
+  // @ts-ignore
+  sharedUpdateListRef.current(c => [...c])
+  const config: AxiosRequestConfig = {
+    onDownloadProgress: progress => {
+      record.loaded_size = progress.loaded
+      // @ts-ignore
+      sharedUpdateListRef.current(c => [...c])
+    }
+  }
+  PostDownloadBoxFileAPI(data, config).then(res => {
+    downloadFromResult(res, name)
+    record.status = 'finished'
+  })
+}
+
 export const boxFileTableColumns = [
   {
     title: 'File',
     key: 'name',
-    render: (record: BoxFileLoadingType) => (<a onClick={() => {
-      const { name, id } = record
-      if (!id) return
-      const data = new FormData()
-      data.append('id', id)
-
-      record.load_type = 'download'
-      record.status = 'loading'
-      record.loaded_size = 0
-      // @ts-ignore
-      sharedUpdateListRef.current(c => [...c])
-      
-      const config: AxiosRequestConfig = {
-        onDownloadProgress: progress => {
-          record.loaded_size = progress.loaded
-          // @ts-ignore
-          sharedUpdateListRef.current(c => [...c])
-        }
-      }
-      PostDownloadBoxFileAPI(data, config).then(res => {
-        downloadFromResult(res, name)
-        record.status = 'finished'
-      })
-    }} download>
+    render: (record: BoxFileLoadingType) => (<a onClick={downloadCallback.bind(null, record)} download>
       <Button type="link" disabled={!record.id}>{record.name}</Button>
     </a>)
   },
@@ -152,6 +153,13 @@ export const boxFileTableColumns = [
     title: 'Upload Time',
     dataIndex: 'created_at',
     render: (timestamp: number) => timestampToString(timestamp)
+  },
+  {
+    title: 'Actions',
+    render: (record: BoxFileLoadingType) => {
+      // const { id } = record
+      return (<a onClick={downloadCallback.bind(null, record)}>download</a>)
+    }
   }
 ]
 
