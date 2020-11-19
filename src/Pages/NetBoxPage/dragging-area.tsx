@@ -52,6 +52,9 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
       refreshBoxFiles()
     })
   }
+  const refresh = () => {
+    refreshBoxFiles()
+  }
   const [displayFiles, setDisplayFiles] = React.useState<Array<any>>([])
   useEffect(() => {
     setDisplayFiles([...extraFiles, ...boxFiles])
@@ -61,6 +64,7 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
       <DropFileTooltipWrapper display={isDragging} />
       <Spin spinning={loading}>
         <Card>
+          <Button onClick={refresh}>Refresh</Button>
           <Button onClick={onClick}>Clean</Button>
           <Table
             dataSource={displayFiles}
