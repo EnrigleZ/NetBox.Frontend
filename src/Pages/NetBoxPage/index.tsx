@@ -23,7 +23,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
 
   React.useEffect(getBoxFiles, [setBoxFiles, getBoxFiles])
 
-  console.log(extraBoxFiles)
+  console.log('extraBoxFiles', extraBoxFiles)
 
   const handleFileDrop = (fileList: FileList) => {
     const n = fileList.length
@@ -44,8 +44,8 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
       ),
       onOk: () => {
         asyncUploadFiles(boxFiles, setExtraBoxFiles).then(results => {
-          console.log(results)
-          getBoxFiles()
+          // console.log(results)
+          // getBoxFiles()
         })
       },
       onCancel: () => {},

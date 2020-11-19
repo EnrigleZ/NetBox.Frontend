@@ -1,4 +1,5 @@
 import React from 'react'
+import { Progress } from 'antd'
 import { AxiosRequestConfig } from 'axios'
 import { PostBoxFileAPI, PostDownloadBoxFileAPI } from './api'
 import { BoxFileType, BoxFileLoadingType } from './types'
@@ -32,17 +33,23 @@ function getUploadFileFormData(boxFile: BoxFileLoadingType) {
 }
 
 export function asyncUploadFiles(boxFiles: Array<BoxFileLoadingType>, setExtraBoxFiles: Function) {
-  const config: AxiosRequestConfig = {
-    onUploadProgress: progress => { console.log('upload', progress) }
-  }
   return Promise.all(boxFiles.map(boxFile => {
+    const config: AxiosRequestConfig = {
+      onUploadProgress: progress => {
+        boxFile.loaded_size = progress.loaded
+        setExtraBoxFiles([...boxFiles])
+      }
+    }
     return new Promise((resolve) => {
       const formData = getUploadFileFormData(boxFile)
       setExtraBoxFiles((files: Array<BoxFileLoadingType>) => {
         return files.concat(boxFile)
       })
-      PostBoxFileAPI(formData, config).then(res => {
-        resolve(res.data)
+      PostBoxFileAPI(formData, config).then(({ data }) => {
+        boxFile.loaded_size = boxFile.size
+        boxFile.id = data.id
+        setExtraBoxFiles([...boxFiles])
+        resolve(data)
       })
     })
   }))
@@ -76,7 +83,16 @@ export const boxFileTableColumns = [
   },
   {
     title: 'Size',
-    dataIndex: 'size'
+    key: 'size',
+    render: (record: BoxFileLoadingType) => {
+      let { size, load_type, loaded_size } = record
+      if (load_type === undefined) return size
+
+      const progress = size === 0 ? 0 : loaded_size / size
+      console.log(progress)
+      return (<Progress percent={progress * 100} size="small"/>)
+    },
+    width: '30%'
   },
   {
     title: 'Upload Time',
