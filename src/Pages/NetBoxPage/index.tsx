@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { Modal } from 'antd'
+import { message, Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
 import { DraggingArea } from './dragging-area'
@@ -47,8 +47,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
       ),
       onOk: () => {
         asyncUploadFiles(boxFiles, setExtraBoxFiles).then(results => {
-          // console.log(results)
-          // getBoxFiles()
+          message.success(`Uploaded ${results.length} file${results.length === 1 ? '' : 's'} successfully.`)
         })
       },
       onCancel: () => {},
