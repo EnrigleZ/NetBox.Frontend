@@ -36,7 +36,7 @@ function getUploadFileFormData(boxFile: BoxFileLoadingType) {
   const formData = new FormData()
   formData.append('file_content', file_upload || '')
   formData.append('name', name || '')
-  formData.append('description', 'sample-description with more than eight words.')
+  formData.append('description', '')
   return formData
 }
 
