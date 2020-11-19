@@ -94,12 +94,18 @@ const FileLoadingProgress = (record: BoxFileLoadingType) => {
 }
 
 function downloadFromResult(res: AxiosResponse, filename?: string) {
-  const url = window.URL.createObjectURL(new Blob([res.data]))
+  const blob = new Blob([res.data])
+  const url = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
   link.setAttribute('download', filename || 'downloaded') //or any other extension
   document.body.appendChild(link)
   link.click()
+}
+
+function refreshUpdateList() {
+  // @ts-ignore
+  sharedUpdateListRef.current(c => [...c])
 }
 
 function downloadCallback (record: BoxFileLoadingType) {
@@ -111,18 +117,18 @@ function downloadCallback (record: BoxFileLoadingType) {
   record.load_type = 'download'
   record.status = 'loading'
   record.loaded_size = 0
-  // @ts-ignore
-  sharedUpdateListRef.current(c => [...c])
+  refreshUpdateList()
   const config: AxiosRequestConfig = {
     onDownloadProgress: progress => {
       record.loaded_size = progress.loaded
-      // @ts-ignore
-      sharedUpdateListRef.current(c => [...c])
-    }
+      refreshUpdateList()
+    },
+    responseType: 'blob'
   }
   PostDownloadBoxFileAPI(data, config).then(res => {
     downloadFromResult(res, name)
     record.status = 'finished'
+    refreshUpdateList()
   })
 }
 
