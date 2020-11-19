@@ -3,7 +3,7 @@ import { Button, Card, Spin, Table } from 'antd'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
 import { DeleteBoxFilesAPI } from './api'
-import { boxFileTableColumns } from './logic'
+import { boxFileTableColumns, dedupeBoxFileList } from './logic'
 import { TooltipWrapperProps, NetBoxFunctionAreaProps, BoxFileType, BoxFileLoadingType } from './types'
 
 const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ display }) => {
@@ -57,7 +57,8 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
   }
   const [displayFiles, setDisplayFiles] = React.useState<Array<any>>([])
   useEffect(() => {
-    setDisplayFiles([...extraFiles, ...boxFiles])
+    console.log('use effect')
+    setDisplayFiles(dedupeBoxFileList(boxFiles, extraFiles))
   }, [setDisplayFiles, extraFiles, boxFiles])
   return (
     <>

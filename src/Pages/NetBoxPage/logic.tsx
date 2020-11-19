@@ -47,6 +47,7 @@ function markLoadFinished(boxFile: BoxFileLoadingType, id?: string) {
   if (id) {
     boxFile.id = id
   }
+  console.log(boxFile)
 }
 
 export function asyncUploadFiles(boxFiles: Array<BoxFileLoadingType>, setExtraBoxFiles: Function) {
@@ -153,3 +154,16 @@ export const boxFileTableColumns = [
     render: (timestamp: number) => timestampToString(timestamp)
   }
 ]
+
+export function dedupeBoxFileList(boxFiles: BoxFileType[], extraFiles: BoxFileLoadingType[]) {
+  const ret: any[] = [...extraFiles],
+    n = boxFiles.length
+  for (let i = 0; i < n; i += 1) {
+    const boxFile = boxFiles[i]
+    if (extraFiles.filter(extraFile => boxFile.id === extraFile.id).length === 0) {
+      ret.push(boxFile)
+    }
+  }
+  console.log(ret)
+  return ret
+}
