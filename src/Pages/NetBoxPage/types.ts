@@ -15,7 +15,8 @@ export type BoxFileType = {
 export type BoxFileLoadingType = {
   load_type: ('upload' | 'download'),
   loaded_size: number,
-  file_upload: File
+  file_upload: File,
+  status?: ('pending' | 'loading' | 'finished')
 } & BoxFileType
 
 

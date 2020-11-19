@@ -1,6 +1,9 @@
 import React from 'react'
-import { Progress } from 'antd'
-import { AxiosRequestConfig } from 'axios'
+import { Button, Progress } from 'antd'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
+
+import { fileSizeToString, timestampToString } from '../../utils/stringify'
+
 import { PostBoxFileAPI, PostDownloadBoxFileAPI } from './api'
 import { BoxFileType, BoxFileLoadingType } from './types'
 
@@ -11,7 +14,8 @@ export function file2BoxFile(file: File) {
     name: file.name,
     loaded_size: 0,
     load_type: 'upload',
-    file_upload: file
+    file_upload: file,
+    status: 'pending'
   }
   return boxFile
 }
@@ -32,6 +36,15 @@ function getUploadFileFormData(boxFile: BoxFileLoadingType) {
   return formData
 }
 
+function markLoadFinished(boxFile: BoxFileLoadingType, id?: string) {
+  const { size } = boxFile
+  boxFile.loaded_size = size
+  boxFile.status = "finished"
+  if (id) {
+    boxFile.id = id
+  }
+}
+
 export function asyncUploadFiles(boxFiles: Array<BoxFileLoadingType>, setExtraBoxFiles: Function) {
   return Promise.all(boxFiles.map(boxFile => {
     const config: AxiosRequestConfig = {
@@ -46,13 +59,42 @@ export function asyncUploadFiles(boxFiles: Array<BoxFileLoadingType>, setExtraBo
         return files.concat(boxFile)
       })
       PostBoxFileAPI(formData, config).then(({ data }) => {
-        boxFile.loaded_size = boxFile.size
-        boxFile.id = data.id
+        markLoadFinished(boxFile, data.id)
         setExtraBoxFiles([...boxFiles])
         resolve(data)
       })
     })
   }))
+}
+
+const FileLoadingProgress = (record: BoxFileLoadingType) => {
+  const { size, load_type, loaded_size, status } = record
+  const finished = status === "finished"
+  let progress = size === 0 ? 0 : loaded_size / size
+  if (status !== 'finished') progress = Math.min(progress, 0.999)
+
+  const color = finished
+    ? '#52c41a'
+    : load_type === 'upload'
+    ? '#1890ff'
+    : '#faad14'
+
+  return (<Progress
+    percent={progress * 100}
+    size="small"
+    strokeColor={color}
+    status={finished ? 'success' : 'active'}
+    format={() => ''}
+  />)
+}
+
+function downloadFromResult(res: AxiosResponse) {
+  // const url = window.URL.createObjectURL(new Blob([res.data]));
+  // const link = document.createElement('a');
+  // link.href = url;
+  // link.setAttribute('download', record.name); //or any other extension
+  // document.body.appendChild(link);
+  // link.click();
 }
 
 export const boxFileTableColumns = [
@@ -68,34 +110,30 @@ export const boxFileTableColumns = [
         }
       }
       PostDownloadBoxFileAPI(data, config).then(res => {
-        // const url = window.URL.createObjectURL(new Blob([res.data]));
-        // const link = document.createElement('a');
-        // link.href = url;
-        // link.setAttribute('download', record.name); //or any other extension
-        // document.body.appendChild(link);
-        // link.click();
+        downloadFromResult(res)
       })
-    }} download>{record.name}</a>)
+    }} download>
+      <Button type="link" disabled={!record.id}>{record.name}</Button>
+    </a>)
   },
   {
     title: 'Description',
-    dataIndex: 'description'
+    key: 'description',
+    width: '30%',
+    render: (record: BoxFileLoadingType) => {
+      const { load_type, description } = record
+      if (!load_type) return description ?? '-'
+      return FileLoadingProgress(record)
+    }
   },
   {
     title: 'Size',
-    key: 'size',
-    render: (record: BoxFileLoadingType) => {
-      let { size, load_type, loaded_size } = record
-      if (load_type === undefined) return size
-
-      const progress = size === 0 ? 0 : loaded_size / size
-      console.log(progress)
-      return (<Progress percent={progress * 100} size="small"/>)
-    },
-    width: '30%'
+    dataIndex: 'size',
+    render: (size: number) => fileSizeToString(size),
   },
   {
     title: 'Upload Time',
-    dataIndex: 'created_at'
+    dataIndex: 'created_at',
+    render: (timestamp: number) => timestampToString(timestamp)
   }
 ]
