@@ -1,31 +1,12 @@
 import React, { FunctionComponent, useEffect } from 'react'
-import { Button, Card, Table } from 'antd'
+import { Button, Card, Spin, Table } from 'antd'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
 import { DeleteBoxFilesAPI } from './api'
 import { boxFileTableColumns } from './logic'
+import { TooltipWrapperProps, NetBoxFunctionAreaProps, BoxFileType, BoxFileLoadingType } from './types'
 
-type NetBoxFunctionAreaProps = {
-  boxFiles: Array<BoxFileType>,
-  refreshBoxFiles: Function,
-  confirmUpload: Function
-}
-
-type TooltipWrapperProps = {
-  display: boolean
-}
-
-export type BoxFileType = {
-  id: string,
-  name?: string
-  description?: string,
-  author?: string,
-  created_at?: number,
-  updated_at?: number,
-  size: number
-}
-
-const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({display}) => {
+const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ display }) => {
   const className = 'covered drop-tooltip faded'
   const ref = React.useRef<HTMLDivElement>(null)
   // const [hidden, setHidden] = React.useState<boolean>(true)
@@ -63,26 +44,33 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({d
 }
 
 const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedComponentProps> = (props) => {
-  const { isDragging, boxFiles, refreshBoxFiles } = props
+  const { isDragging, boxFiles, refreshBoxFiles, setLoading, loading, extraFiles } = props
   const onClick: any = () => {
+    setLoading(true)
     DeleteBoxFilesAPI().then(res => {
       console.log(res.data)
       refreshBoxFiles()
     })
   }
+  const [displayFiles, setDisplayFiles] = React.useState<Array<any>>([])
+  useEffect(() => {
+    setDisplayFiles([...extraFiles, ...boxFiles])
+  }, [setDisplayFiles, extraFiles, boxFiles])
   return (
     <>
       <DropFileTooltipWrapper display={isDragging} />
-      <Card>
-        <Button onClick={onClick}>Clean</Button>
-        <Table
-          dataSource={boxFiles}
-          columns={boxFileTableColumns}
-          rowKey='id'
-        />
-      </Card>
+      <Spin spinning={loading}>
+        <Card>
+          <Button onClick={onClick}>Clean</Button>
+          <Table
+            dataSource={displayFiles}
+            columns={boxFileTableColumns}
+            rowKey='id'
+          />
+        </Card>
+      </Spin>
     </>
   )
-} 
+}
 
 export const DraggingArea = withDraggable<NetBoxFunctionAreaProps>(NetBoxFunctionArea)
