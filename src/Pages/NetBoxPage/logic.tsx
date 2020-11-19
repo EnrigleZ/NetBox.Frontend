@@ -7,6 +7,10 @@ import { fileSizeToString, timestampToString } from '../../utils/stringify'
 import { PostBoxFileAPI, PostDownloadBoxFileAPI } from './api'
 import { BoxFileType, BoxFileLoadingType } from './types'
 
+export const sharedUpdateListRef = {
+  current: () => {}
+}
+
 export function file2BoxFile(file: File) {
   const boxFile: BoxFileLoadingType = {
     id: '',
@@ -15,7 +19,7 @@ export function file2BoxFile(file: File) {
     loaded_size: 0,
     load_type: 'upload',
     file_upload: file,
-    status: 'pending'
+    status: 'loading'
   }
   return boxFile
 }
@@ -88,29 +92,41 @@ const FileLoadingProgress = (record: BoxFileLoadingType) => {
   />)
 }
 
-function downloadFromResult(res: AxiosResponse) {
-  // const url = window.URL.createObjectURL(new Blob([res.data]));
-  // const link = document.createElement('a');
-  // link.href = url;
-  // link.setAttribute('download', record.name); //or any other extension
-  // document.body.appendChild(link);
-  // link.click();
+function downloadFromResult(res: AxiosResponse, filename?: string) {
+  const url = window.URL.createObjectURL(new Blob([res.data]))
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute('download', filename || 'downloaded') //or any other extension
+  document.body.appendChild(link)
+  link.click()
 }
 
 export const boxFileTableColumns = [
   {
     title: 'File',
     key: 'name',
-    render: (record: any) => (<a onClick={() => {
+    render: (record: BoxFileLoadingType) => (<a onClick={() => {
+      const { name, id } = record
+      if (!id) return
       const data = new FormData()
-      data.append('id', record.id)
-      const config = {
-        onUploadProgress: (e: any) => {
-          console.log(e)
+      data.append('id', id)
+
+      record.load_type = 'download'
+      record.status = 'loading'
+      record.loaded_size = 0
+      // @ts-ignore
+      sharedUpdateListRef.current(c => [...c])
+      
+      const config: AxiosRequestConfig = {
+        onDownloadProgress: progress => {
+          record.loaded_size = progress.loaded
+          // @ts-ignore
+          sharedUpdateListRef.current(c => [...c])
         }
       }
       PostDownloadBoxFileAPI(data, config).then(res => {
-        downloadFromResult(res)
+        downloadFromResult(res, name)
+        record.status = 'finished'
       })
     }} download>
       <Button type="link" disabled={!record.id}>{record.name}</Button>

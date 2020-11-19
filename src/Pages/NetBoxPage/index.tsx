@@ -3,7 +3,7 @@ import { Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
 import { DraggingArea } from './dragging-area'
-import { asyncUploadFiles, fileList2Array } from './logic'
+import { asyncUploadFiles, fileList2Array, sharedUpdateListRef } from './logic'
 import { GetBoxFilesAPI } from './api'
 import { NetBoxProps, BoxFileType, BoxFileLoadingType } from './types'
 
@@ -11,6 +11,9 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
   const [boxFiles, setBoxFiles] = React.useState<Array<BoxFileType>>([])
   const [loading, setLoading] = React.useState<boolean>(false)
   const [extraBoxFiles, setExtraBoxFiles] = React.useState<Array<BoxFileLoadingType>>([])
+
+  // @ts-ignore
+  sharedUpdateListRef.current = setExtraBoxFiles
 
   const getBoxFiles = React.useCallback(() => {
     setLoading(true)
