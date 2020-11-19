@@ -1,22 +1,47 @@
 import React from 'react'
+import { AxiosRequestConfig } from 'axios'
 import { PostBoxFileAPI, PostDownloadBoxFileAPI } from './api'
+import { BoxFileType, BoxFileLoadingType } from './types'
+
+export function file2BoxFile(file: File) {
+  const boxFile: BoxFileLoadingType = {
+    id: '',
+    size: file.size,
+    name: file.name,
+    loaded_size: 0,
+    load_type: 'upload',
+    file_upload: file
+  }
+  return boxFile
+}
 
 export function fileList2Array(fileList: FileList) {
   const ret = []
   const n = fileList.length
-  for (let i = 0; i < n; ++ i) ret.push(fileList[i])
+  for (let i = 0; i < n; ++ i) ret.push(file2BoxFile(fileList[i]))
   return ret
 }
 
-export function asyncUploadFiles(files: Array<File>) {
-  return Promise.all(files.map(file => {
+function getUploadFileFormData(boxFile: BoxFileLoadingType) {
+  const { name, file_upload } = boxFile
+  const formData = new FormData()
+  formData.append('file_content', file_upload || '')
+  formData.append('name', name || '')
+  formData.append('description', 'sample-description with more than eight words.')
+  return formData
+}
+
+export function asyncUploadFiles(boxFiles: Array<BoxFileLoadingType>, setExtraBoxFiles: Function) {
+  const config: AxiosRequestConfig = {
+    onUploadProgress: progress => { console.log('upload', progress) }
+  }
+  return Promise.all(boxFiles.map(boxFile => {
     return new Promise((resolve) => {
-      const { name } = file
-      const formData = new FormData()
-      formData.append('file_content', file)
-      formData.append('name', name)
-      formData.append('description', 'sample-description with more than eight words.')
-      PostBoxFileAPI(formData).then(res => {
+      const formData = getUploadFileFormData(boxFile)
+      setExtraBoxFiles((files: Array<BoxFileLoadingType>) => {
+        return files.concat(boxFile)
+      })
+      PostBoxFileAPI(formData, config).then(res => {
         resolve(res.data)
       })
     })
@@ -43,7 +68,7 @@ export const boxFileTableColumns = [
         // document.body.appendChild(link);
         // link.click();
       })
-    }}>{record.name}</a>)
+    }} download>{record.name}</a>)
   },
   {
     title: 'Description',
