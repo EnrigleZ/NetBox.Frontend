@@ -3,52 +3,57 @@ import { message, Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
 import { DraggingArea } from './dragging-area'
-import { asyncUploadFiles, fileList2Array, sharedUpdateListRef } from './logic'
+import { asyncUploadFiles, fileListToUploadStatuses, sharedUpdateListRef } from './logic'
 import { GetBoxFilesAPI } from './api'
-import { NetBoxProps, BoxFileType, BoxFileLoadingType } from './types'
+import { NetBoxProps, BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'
 
 const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
-  const [boxFiles, setBoxFiles] = React.useState<Array<BoxFileType>>([])
+  const [boxFiles, setBoxFiles] = React.useState<BoxFileClass[]>([])
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [extraBoxFiles, setExtraBoxFiles] = React.useState<Array<BoxFileLoadingType>>([])
 
   // @ts-ignore
-  sharedUpdateListRef.current = setExtraBoxFiles
+  sharedUpdateListRef.current = setBoxFiles
 
-  const getBoxFiles = React.useCallback(() => {
-    setLoading(true)
+  const getBoxFiles = React.useCallback((showLoading: boolean = true) => {
+    if (showLoading) setLoading(true)
+    const { LoadingStatusMap } = BoxFileLoadingStatusClass
+    // console.log('LoadingStatusMap:', BoxFileLoadingStatusClass.LoadingStatusMap)
     GetBoxFilesAPI().then(({ data }) => {
-      console.log('GetBoxFilesAPI:', data)
-      setBoxFiles(data)
+      const boxFiles = data.map((item: ResponseFileType) => {
+        const boxFile = BoxFileClass.FromResponseData(item)
+        boxFile.setLoadingStatus(LoadingStatusMap[item.id])
+        return boxFile
+      })
+      console.log('Generated boxFiles:', boxFiles)
+      setBoxFiles(boxFiles)
       setLoading(false)
     })
   }, [setBoxFiles])
 
   React.useEffect(getBoxFiles, [setBoxFiles, getBoxFiles])
 
-  console.log('extraBoxFiles', extraBoxFiles)
-
   const handleFileDrop = (fileList: FileList) => {
     const n = fileList.length
     if (!n) return
 
-    const boxFiles = fileList2Array(fileList)
+    const uploadingStatusList = fileListToUploadStatuses(fileList)
 
     Modal.confirm({
       title: `Confirm to upload ${n} file${n === 1 ? '' : 's'}`,
       content: (
         <div>
           {
-            boxFiles.map(boxFile => (
-              <div key={boxFile.name}>{boxFile.name}</div>
+            uploadingStatusList.map((status, i) => (
+              <div key={`${status.name}${i}`}>{status.name}</div>
             ))
           }
         </div>
       ),
       onOk: () => {
-        asyncUploadFiles(boxFiles, setExtraBoxFiles).then(results => {
-          message.success(`Uploaded ${results.length} file${results.length === 1 ? '' : 's'} successfully.`)
-        })
+        asyncUploadFiles(uploadingStatusList)
+        // asyncUploadFiles(boxFiles, setExtraBoxFiles).then(results => {
+        //   message.success(`Uploaded ${results.length} file${results.length === 1 ? '' : 's'} successfully.`)
+        // })
       },
       onCancel: () => {},
       icon: <HeartOutlined />
@@ -60,7 +65,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
       <DraggingArea
         handleDrop={handleFileDrop}
         boxFiles={boxFiles}
-        extraFiles={extraBoxFiles}
+        // extraFiles={extraBoxFiles}
         refreshBoxFiles={getBoxFiles}
         confirmUpload={handleFileDrop}
         setLoading={setLoading}
