@@ -44,7 +44,6 @@ export class BoxFileClass {
   static FromResponseData(item: ResponseFileType) {
     const { id, name, description, author, created_at, updated_at, size } = item
     const boxFile = new BoxFileClass(id, name, description, author, created_at, updated_at, size)
-    console.log('From response', boxFile)
     return boxFile
   }
 

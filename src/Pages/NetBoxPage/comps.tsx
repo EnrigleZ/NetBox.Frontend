@@ -13,7 +13,6 @@ export const DescriptionComp: React.FunctionComponent<DescriptionCompType> = ({ 
     {description}
   </>)
 
-  console.log(loadingStatus)
   const { loadType, loadedSize, status } = loadingStatus
   if (status === 'pending') return (<> {status} </>)
   

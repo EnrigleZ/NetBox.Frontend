@@ -10,17 +10,14 @@ import { NetBoxProps, BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType 
 const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
   const [boxFiles, setBoxFiles] = React.useState<BoxFileClass[]>([])
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [loadingStatusList, setLoadingStatusList] = React.useState<BoxFileLoadingStatusClass[]>([])
-  // const [extraBoxFiles, setExtraBoxFiles] = React.useState<Array<BoxFileLoadingType>>([])
 
   // @ts-ignore
   sharedUpdateListRef.current = setBoxFiles
-  console.log('boxFiles', boxFiles)
 
   const getBoxFiles = React.useCallback((showLoading: boolean = true) => {
     if (showLoading) setLoading(true)
     const { LoadingStatusMap } = BoxFileLoadingStatusClass
-    console.log('LoadingStatusMap:', BoxFileLoadingStatusClass.LoadingStatusMap)
+    // console.log('LoadingStatusMap:', BoxFileLoadingStatusClass.LoadingStatusMap)
     GetBoxFilesAPI().then(({ data }) => {
       const boxFiles = data.map((item: ResponseFileType) => {
         const boxFile = BoxFileClass.FromResponseData(item)
@@ -35,15 +32,11 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
 
   React.useEffect(getBoxFiles, [setBoxFiles, getBoxFiles])
 
-  // console.log('extraBoxFiles', extraBoxFiles)
-
   const handleFileDrop = (fileList: FileList) => {
     const n = fileList.length
     if (!n) return
 
     const uploadingStatusList = fileListToUploadStatuses(fileList)
-    setLoadingStatusList(uploadingStatusList)
-    // const boxFiles = fileList2Array(fileList)
 
     Modal.confirm({
       title: `Confirm to upload ${n} file${n === 1 ? '' : 's'}`,

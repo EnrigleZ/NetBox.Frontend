@@ -48,7 +48,6 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
   const onClick: any = () => {
     setLoading(true)
     DeleteBoxFilesAPI().then(res => {
-      console.log(res.data)
       refreshBoxFiles()
     })
   }
@@ -57,7 +56,6 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
   }
   const [displayFiles, setDisplayFiles] = React.useState<Array<any>>([])
   useEffect(() => {
-    console.log('use effect')
     setDisplayFiles(boxFiles)
   }, [setDisplayFiles, boxFiles])
   return (
