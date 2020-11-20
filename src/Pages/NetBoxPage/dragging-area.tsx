@@ -3,8 +3,8 @@ import { Button, Card, Spin, Table } from 'antd'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
 import { DeleteBoxFilesAPI } from './api'
-import { boxFileTableColumns, dedupeBoxFileList } from './logic'
-import { TooltipWrapperProps, NetBoxFunctionAreaProps, BoxFileType, BoxFileLoadingType } from './types'
+import { boxFileTableColumns } from './logic'
+import { TooltipWrapperProps, NetBoxFunctionAreaProps } from './types'
 
 const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ display }) => {
   const className = 'covered drop-tooltip faded'
@@ -44,7 +44,7 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ 
 }
 
 const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedComponentProps> = (props) => {
-  const { isDragging, boxFiles, refreshBoxFiles, setLoading, loading, extraFiles } = props
+  const { isDragging, boxFiles, refreshBoxFiles, setLoading, loading } = props
   const onClick: any = () => {
     setLoading(true)
     DeleteBoxFilesAPI().then(res => {
@@ -58,8 +58,8 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
   const [displayFiles, setDisplayFiles] = React.useState<Array<any>>([])
   useEffect(() => {
     console.log('use effect')
-    setDisplayFiles(dedupeBoxFileList(boxFiles, extraFiles))
-  }, [setDisplayFiles, extraFiles, boxFiles])
+    setDisplayFiles(boxFiles)
+  }, [setDisplayFiles, boxFiles])
   return (
     <>
       <DropFileTooltipWrapper display={isDragging} />

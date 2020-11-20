@@ -10,6 +10,11 @@ export const PostBoxFileAPI = async (data: FormData, config?: AxiosRequestConfig
     return ret
 }
 
+export const PostBoxFileContentAPI = async (data: FormData, config?: AxiosRequestConfig | undefined) => {
+    const ret = Axios.post('/box/box-file-content', data, config)
+    return ret
+}
+
 export const DeleteBoxFilesAPI = async () => {
     const ret = Axios.delete('/box/box-files')
     return ret
