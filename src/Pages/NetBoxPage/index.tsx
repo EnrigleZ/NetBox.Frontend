@@ -50,6 +50,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
         </div>
       ),
       onOk: () => {
+        message.info("Prepare to upload...")
         asyncUploadFiles(uploadingStatusList)
         // asyncUploadFiles(boxFiles, setExtraBoxFiles).then(results => {
         //   message.success(`Uploaded ${results.length} file${results.length === 1 ? '' : 's'} successfully.`)

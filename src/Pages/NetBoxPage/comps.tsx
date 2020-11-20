@@ -7,6 +7,10 @@ type DescriptionCompType = {
   boxFile: BoxFileClass
 }
 
+const Pending = () => (
+  <span style={{color: "#666", fontStyle: "italic"}}>Pending...</span>
+)
+
 export const DescriptionComp: React.FunctionComponent<DescriptionCompType> = ({ boxFile }) => {
   const { loadingStatus, description, size } = boxFile
   if (!loadingStatus) return (<>
@@ -14,7 +18,7 @@ export const DescriptionComp: React.FunctionComponent<DescriptionCompType> = ({ 
   </>)
 
   const { loadType, loadedSize, status } = loadingStatus
-  if (status === 'pending') return (<> {status} </>)
+  if (status === 'pending') return (<Pending />)
   
   const finished: boolean = status === "finished"
   let progress = size === 0 ? 0 : loadedSize / size
@@ -23,8 +27,8 @@ export const DescriptionComp: React.FunctionComponent<DescriptionCompType> = ({ 
   const color = finished
     ? '#52c41a'
     : loadType === 'upload'
-      ? '#1890ff'
-      : '#faad14'
+      ? '#faad14'
+      : '#1890ff'
 
   return (<Progress
     percent={progress * 100}
