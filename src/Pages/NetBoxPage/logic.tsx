@@ -126,7 +126,7 @@ export const boxFileTableColumns = [
   },
   {
     title: 'Upload Time',
-    dataIndex: 'created_at',
+    dataIndex: 'createdAt',
     render: (timestamp: number) => timestampToString(timestamp)
   }
 ]

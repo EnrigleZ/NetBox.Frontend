@@ -8,7 +8,7 @@ export function fileSizeToString(size: number) {
 const DATE_FORMAT = 'MM-DD YYYY'
 export function timestampToString(timestamp: number, placeholder: string = '-') {
   const m = moment(timestamp)
-  if (!m || timestamp <= 0) return placeholder
+  if (!m || !timestamp || timestamp <= 0) return placeholder
   const diffHours = m.diff(moment.now(), 'hours')
   return (diffHours > -24) ? m.fromNow() : m.format(DATE_FORMAT)
 }
