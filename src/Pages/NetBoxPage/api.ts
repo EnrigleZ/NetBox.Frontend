@@ -1,4 +1,5 @@
 import Axios, { AxiosRequestConfig } from 'axios'
+import qs, { ParsedUrlQueryInput } from 'querystring'
 
 export const GetBoxFilesAPI = async () => {
     const ret = Axios.get('/box/box-files')
@@ -20,7 +21,12 @@ export const DeleteBoxFilesAPI = async () => {
     return ret
 }
 
-export const PostDownloadBoxFileAPI = async (data: object, config: AxiosRequestConfig | undefined) => {
+export const DeleteBoxFileAPI = async (data: ParsedUrlQueryInput) => {
+    const ret = Axios.delete(`/box/box-file?${qs.stringify(data)}`, )
+    return ret
+}
+
+export const PostDownloadBoxFileAPI = async (data: FormData, config: AxiosRequestConfig | undefined) => {
     const ret = Axios.post('/box/download', data, config)
     return ret
 }

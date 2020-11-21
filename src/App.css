@@ -41,3 +41,11 @@ body {
 .net-box-page .box-file-table-cell {
   color: #777
 }
+
+.net-box-page .action-icons {
+  min-width: 100px;
+}
+
+.net-box-page .action-icons a {
+  color: #555
+}

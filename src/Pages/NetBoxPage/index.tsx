@@ -3,7 +3,7 @@ import { message, Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
 import { DraggingArea } from './dragging-area'
-import { asyncUploadFiles, fileListToUploadStatuses, sharedUpdateListRef } from './logic'
+import { asyncUploadFiles, fileListToUploadStatuses, refreshListRef, sharedUpdateListRef } from './logic'
 import { GetBoxFilesAPI } from './api'
 import { NetBoxProps, BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'
 
@@ -29,6 +29,9 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
       setLoading(false)
     })
   }, [setBoxFiles])
+
+  // @ts-ignore
+  refreshListRef.current = getBoxFiles
 
   React.useEffect(getBoxFiles, [setBoxFiles, getBoxFiles])
 
