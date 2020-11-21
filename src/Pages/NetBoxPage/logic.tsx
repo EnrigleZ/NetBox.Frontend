@@ -116,7 +116,7 @@ export const boxFileTableColumns = [
     key: 'description',
     width: '30%',
     render: (record: BoxFileClass) => {
-      return <DescriptionComp boxFile={record} />
+      return <DescriptionComp boxFile={record} updateList={updateList} />
     }
   },
   {

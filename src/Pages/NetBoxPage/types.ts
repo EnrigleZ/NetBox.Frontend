@@ -53,12 +53,16 @@ export class BoxFileClass {
 
   setLoadingStatus(status?: BoxFileLoadingStatusClass) {
     const previousStatus = this.loadingStatus
-    if (!status || previousStatus === status) return
-    this.loadingStatus = status
-    status.boxFile = this
-
     const { LoadingStatusMap } = BoxFileLoadingStatusClass
-    LoadingStatusMap[this.id] = status
+    if (previousStatus === status) return
+
+    this.loadingStatus = status
+    if (status) {
+      status.boxFile = this
+      LoadingStatusMap[this.id] = status
+    } else {
+      delete LoadingStatusMap[this.id]
+    }
     // if (previousStatus) {
     //   const { LoadingStatusMap } = BoxFileLoadingStatusClass
     //   const index = LoadingList.indexOf(previousStatus)
