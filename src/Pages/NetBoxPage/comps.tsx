@@ -27,8 +27,6 @@ export const DescriptionComp: React.FunctionComponent<DescriptionCompType> = ({ 
     updateList()
   }
 
-  console.log(boxFile)
-
   if (!loadingStatus) return (<>
     {description}
   </>)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import { fileSizeToString, timestampToString } from '../../utils/stringify'
@@ -64,6 +64,8 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
         PostBoxFileContentAPI(formData, config).then(({ data }) => {
           status.finish()
           updateList()
+          message.success((<><b>{data.name}</b> uploaded successfully</>))
+
           resolve(data)
         })
       })
@@ -122,11 +124,15 @@ export const boxFileTableColumns = [
   {
     title: 'Size',
     dataIndex: 'size',
-    render: (size: number) => fileSizeToString(size),
+    render: (size: number) => (<div className="box-file-table-cell">
+      {fileSizeToString(size)}
+    </div>),
   },
   {
     title: 'Upload Time',
     dataIndex: 'createdAt',
-    render: (timestamp: number) => timestampToString(timestamp)
+    render: (timestamp: number) => (<div className="box-file-table-cell">
+      { timestampToString(timestamp) }
+    </div>)
   }
 ]

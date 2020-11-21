@@ -37,3 +37,7 @@ body {
 .drop-tooltip.hidden {
   z-index: -1;
 }
+
+.net-box-page .box-file-table-cell {
+  color: #777
+}
