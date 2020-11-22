@@ -1,7 +1,7 @@
 import React from 'react'
 import { Progress } from 'antd'
 
-import { BoxFileClass } from './types'
+import { BoxFileClass } from '../types'
 
 type DescriptionCompType = {
   boxFile: BoxFileClass,

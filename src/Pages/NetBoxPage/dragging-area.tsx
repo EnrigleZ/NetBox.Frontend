@@ -5,6 +5,7 @@ import { withDraggable, ReceivedComponentProps } from '../../Containers/draggabl
 import { DeleteBoxFilesAPI } from './api'
 import { boxFileTableColumns } from './logic'
 import { TooltipWrapperProps, NetBoxFunctionAreaProps } from './types'
+import FileTable from './comps/FileTable'
 
 const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ display }) => {
   const className = 'covered drop-tooltip faded'
@@ -70,6 +71,7 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
             columns={boxFileTableColumns}
             rowKey='id'
           />
+          <FileTable boxFiles={boxFiles} />
         </Card>
       </Spin>
     </>

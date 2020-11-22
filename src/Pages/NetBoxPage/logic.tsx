@@ -12,7 +12,7 @@ import {
   PostDownloadBoxFileAPI
 } from './api'
 import { BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'
-import { DescriptionComp } from './comps'
+import { DescriptionComp } from './comps/DescriptionComp'
 
 export const sharedUpdateListRef = {
   current: () => {}
