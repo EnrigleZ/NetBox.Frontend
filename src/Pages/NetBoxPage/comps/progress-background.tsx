@@ -7,7 +7,7 @@ const ProcessBackgroundTD = styled.td`
     position: absolute;
     left: 0;
     height: 100%;
-    background: #f9f9f9;
+    background: transparent;
     z-index: -1;
     transition: width 0.5s, background 0.5s;
     padding: 0 !important;
