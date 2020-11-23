@@ -50,6 +50,6 @@ body {
   min-width: 100px;
 }
 
-.net-box-page .action-icons a {
+.net-box-page .action-icons a.disabled {
   color: #555
 }

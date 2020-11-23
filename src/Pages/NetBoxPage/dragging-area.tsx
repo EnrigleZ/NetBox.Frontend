@@ -3,7 +3,7 @@ import { Button, Card, Spin, Table } from 'antd'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
 import { DeleteBoxFilesAPI } from './api'
-import { boxFileTableColumns } from './logic'
+// import { boxFileTableColumns } from './logic'
 import { TooltipWrapperProps, NetBoxFunctionAreaProps } from './types'
 import FileTable from './comps/file-table'
 

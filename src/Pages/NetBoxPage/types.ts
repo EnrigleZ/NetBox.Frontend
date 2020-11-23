@@ -48,7 +48,9 @@ export class BoxFileClass {
   }
 
   isReady() {
-    return !!this.id // && !this.loadingStatus
+    const ret = !!this.id && !(this.loadingStatus && this.loadingStatus.status === "loading")// && !this.loadingStatus
+    // console.log(this.name, ret)
+    return ret
   }
 
   setLoadingStatus(status?: BoxFileLoadingStatusClass) {

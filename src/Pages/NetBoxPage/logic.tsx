@@ -122,47 +122,47 @@ export function deleteBoxFile(boxFile: BoxFileClass) {
   })
 }
 
-export const boxFileTableColumns = [
-  {
-    title: 'File',
-    key: 'name',
-    render: (record: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, record)} download>
-      <Button type="link" disabled={!record.id}>{record.name}</Button>
-    </a>)
-  },
-  {
-    title: 'Description',
-    key: 'description',
-    width: '30%',
-    render: (record: BoxFileClass) => {
-      return <DescriptionComp boxFile={record} updateList={updateList} />
-    }
-  },
-  {
-    title: 'Size',
-    dataIndex: 'size',
-    render: (size: number) => (<div className="box-file-table-cell">
-      {fileSizeToString(size)}
-    </div>),
-  },
-  {
-    title: 'Upload Time',
-    dataIndex: 'createdAt',
-    render: (timestamp: number) => (<div className="box-file-table-cell">
-      { timestampToString(timestamp) }
-    </div>)
-  },
-  {
-    title: 'Actions',
-    key: 'actions',
-    render: (record: BoxFileClass) => {
-      return (<div className="action-icons">
-        <a><DownloadOutlined onClick={() => {downloadFromBoxFile(record)}} color="grey"/></a>
-        <Divider type="vertical" />
-        <a><EyeOutlined/></a>
-        <Divider type="vertical" />
-        <a><DeleteOutlined onClick={() => {deleteBoxFile(record)}}/></a>
-      </div>)
-    }
-  }
-]
+// export const boxFileTableColumns = [
+//   {
+//     title: 'File',
+//     key: 'name',
+//     render: (record: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, record)} download>
+//       <Button type="link" disabled={!record.id}>{record.name}</Button>
+//     </a>)
+//   },
+//   {
+//     title: 'Description',
+//     key: 'description',
+//     width: '30%',
+//     render: (record: BoxFileClass) => {
+//       return <DescriptionComp boxFile={record} updateList={updateList} />
+//     }
+//   },
+//   {
+//     title: 'Size',
+//     dataIndex: 'size',
+//     render: (size: number) => (<div className="box-file-table-cell">
+//       {fileSizeToString(size)}
+//     </div>),
+//   },
+//   {
+//     title: 'Upload Time',
+//     dataIndex: 'createdAt',
+//     render: (timestamp: number) => (<div className="box-file-table-cell">
+//       { timestampToString(timestamp) }
+//     </div>)
+//   },
+//   {
+//     title: 'Actions',
+//     key: 'actions',
+//     render: (record: BoxFileClass) => {
+//       return (<div className="action-icons">
+//         <a><DownloadOutlined onClick={() => {downloadFromBoxFile(record)}} color="grey"/></a>
+//         <Divider type="vertical" />
+//         <a><EyeOutlined/></a>
+//         <Divider type="vertical" />
+//         <a><DeleteOutlined onClick={() => {deleteBoxFile(record)}}/></a>
+//       </div>)
+//     }
+//   }
+// ]

@@ -44,12 +44,13 @@ export function getTableColumns() {
         {
             Header: 'Actions',
             accessor: (boxFile: BoxFileClass) => {
+                const isReady = boxFile.isReady()
                 return (<div className="action-icons">
-                    <a><DownloadOutlined onClick={() => { downloadFromBoxFile(boxFile) }} color="grey" /></a>
+                    <a className={isReady ? '' : 'disabled'}><DownloadOutlined onClick={() => { isReady && downloadFromBoxFile(boxFile) }} color="grey" /></a>
                     <Divider type="vertical" />
                     <a><EyeOutlined /></a>
                     <Divider type="vertical" />
-                    <a><DeleteOutlined onClick={() => { deleteBoxFile(boxFile) }} /></a>
+                    <a className={isReady ? '' : 'disabled'}><DeleteOutlined onClick={() => { isReady && deleteBoxFile(boxFile) }} /></a>
                 </div>)
             },
             id: 'actions'
