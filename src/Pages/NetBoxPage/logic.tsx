@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Divider, message } from 'antd'
+import { Button, Divider, message, Modal } from 'antd'
 import { DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
@@ -76,7 +76,7 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
 
           resolve(data)
         }).catch(() => {
-          deleteBoxFile(dummyBoxFile, true)
+          deleteBoxFile_(dummyBoxFile, true)
           message.error(`Failed to upload file ${status.name}`)
         })
       })
@@ -121,11 +121,7 @@ export function downloadFromBoxFile(boxFile: BoxFileClass) {
   })
 }
 
-export function deleteBoxFile(boxFile: BoxFileClass, force: boolean = false) {
-  const { loadingStatus } = boxFile
-  if (!force && (!boxFile.isReady() || loadingStatus && loadingStatus.loadType === 'upload' && loadingStatus.status !== 'finished')) {
-    return
-  }
+export function deleteBoxFile_(boxFile: BoxFileClass, force: boolean = false) {
   const params = { id: boxFile.id }
   DeleteBoxFileAPI(params).then(() => {
     refreshListRef.current()
@@ -133,47 +129,19 @@ export function deleteBoxFile(boxFile: BoxFileClass, force: boolean = false) {
   })
 }
 
-// export const boxFileTableColumns = [
-//   {
-//     title: 'File',
-//     key: 'name',
-//     render: (record: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, record)} download>
-//       <Button type="link" disabled={!record.id}>{record.name}</Button>
-//     </a>)
-//   },
-//   {
-//     title: 'Description',
-//     key: 'description',
-//     width: '30%',
-//     render: (record: BoxFileClass) => {
-//       return <DescriptionComp boxFile={record} updateList={updateList} />
-//     }
-//   },
-//   {
-//     title: 'Size',
-//     dataIndex: 'size',
-//     render: (size: number) => (<div className="box-file-table-cell">
-//       {fileSizeToString(size)}
-//     </div>),
-//   },
-//   {
-//     title: 'Upload Time',
-//     dataIndex: 'createdAt',
-//     render: (timestamp: number) => (<div className="box-file-table-cell">
-//       { timestampToString(timestamp) }
-//     </div>)
-//   },
-//   {
-//     title: 'Actions',
-//     key: 'actions',
-//     render: (record: BoxFileClass) => {
-//       return (<div className="action-icons">
-//         <a><DownloadOutlined onClick={() => {downloadFromBoxFile(record)}} color="grey"/></a>
-//         <Divider type="vertical" />
-//         <a><EyeOutlined/></a>
-//         <Divider type="vertical" />
-//         <a><DeleteOutlined onClick={() => {deleteBoxFile(record)}}/></a>
-//       </div>)
-//     }
-//   }
-// ]
+export function deleteBoxFile(boxFile: BoxFileClass) {
+  const { loadingStatus } = boxFile
+  if (!boxFile.isReady() || loadingStatus && loadingStatus.loadType === 'upload' && loadingStatus.status !== 'finished') {
+    return
+  }
+
+  Modal.confirm({
+    title: `Confirm to delete ${boxFile.name}?`,
+    onOk: () => {
+      deleteBoxFile_(boxFile)
+    },
+    okText: 'Delete',
+    cancelText: 'Cancel'
+  })
+
+}
