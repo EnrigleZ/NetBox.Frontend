@@ -66,11 +66,11 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
         <Card>
           <Button onClick={refresh}>Refresh</Button>
           <Button onClick={onClick}>Clean</Button>
-          <Table
+          {/* <Table
             dataSource={displayFiles}
             columns={boxFileTableColumns}
             rowKey='id'
-          />
+          /> */}
           <FileTable boxFiles={boxFiles} />
         </Card>
       </Spin>

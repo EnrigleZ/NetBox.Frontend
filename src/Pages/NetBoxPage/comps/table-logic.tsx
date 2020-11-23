@@ -16,26 +16,30 @@ export function getTableColumns() {
         {
             Header: 'File name',
             accessor: (boxFile: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, boxFile)}>{boxFile.name}</a>),
-            id: 'name'
+            id: 'name',
+            width: '25%'
         },
         {
             Header: 'Description',
             accessor: (boxFile: BoxFileClass) => (<div className="progress">
                 {<DescriptionComp boxFile={boxFile} updateList={updateList} />}
             </div>),
-            id: "desc"
+            id: "desc",
+            width: '35%'
         },
         {
             Header: 'Size',
             accessor: (boxFile: BoxFileClass) => (<div>
                 {fileSizeToString(boxFile.size, '-')}
             </div>),
-            id: 'size'
+            id: 'size',
+            width: '15%'
         },
         {
             Header: 'Create time',
             accessor: (boxFile: BoxFileClass) => timestampToString(boxFile.createdAt, '-'),
-            id: 'create'
+            id: 'create',
+            width: '20%'
         },
         {
             Header: 'Actions',

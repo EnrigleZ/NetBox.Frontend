@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Button } from 'antd'
 import React from 'react'
 import { useTable, usePagination } from 'react-table'
 import styled from 'styled-components'
@@ -17,8 +18,17 @@ const Styles = styled.div`
     border-spacing: 0;
     color: rgb(128, 128, 128);
 
+    thead {
+        background: #fafafa
+    }
+
     tr {
       transition: background 0.3s;
+      transform: scale(1);
+      background: transparent;
+      display: inline-flex;
+      width: 100%;
+
       :hover {
         background: #fafafa;
       }
@@ -38,10 +48,6 @@ const Styles = styled.div`
       text-overflow: ellipsis;
       white-space: nowrap;
 
-      /* The secret sauce */
-      /* Each cell should grow equally */
-    //   width: 1%;
-      /* But "collapsed" cells should be as small as possible */
       &.collapse {
         width: 0.0000000001%;
       }
@@ -51,22 +57,26 @@ const Styles = styled.div`
       }
     }
 
+    tr {
+    }
+
     th.name,
     td.name {
-        max-width: 200px;
         text-align: left !important;
         padding-left: 20px;
     }
-    th.desc {
-        width: 30%
-    }
-    td.size {
-        max-width: 100px
-    }
-  }
 
   .pagination {
     padding: 0.5rem;
+  }
+
+  .progress-bg {
+      position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ee6666;
+    z-index: -1;
   }
 `
 
@@ -98,41 +108,50 @@ const FileTable: React.FunctionComponent<FileTableProps> = ({ data, columns }): 
         {
             columns,
             data,
-            initialState: { pageIndex: 0 },
+            initialState: {
+                pageIndex: 0,
+                pageSize: 12
+            },
         },
         usePagination
     )
 
     return (
-        <table {...getTableProps()} className="file-table">
-            <thead className="ant-table-thead">
-                <tr>
-                    {headers.map(column => (
-                        <th className={`ant-table-cell align-center ${column.id}`} {...column.getHeaderProps()}>{column.render('Header')}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {page.map((row, i) => {
-                    prepareRow(row)
-                    return (
-                        <tr {...row.getRowProps()}>
-                            {row.cells.map(cell => {
-                                console.log(cell)
-                                return (
-                                    <td
-                                        {...cell.getCellProps()}
-                                        className={cell.column.id}
-                                    >
-                                        {cell.render('Cell')}
-                                    </td>
-                                )
-                            })}
-                        </tr>
-                    )
-                })}
-            </tbody>
-        </table>
+        <>
+            <table {...getTableProps()} className="file-table">
+                <thead>
+                    <tr>
+                        {headers.map(column => (
+                            <th className={`ant-table-cell align-center ${column.id}`} 
+                            style={{width: column.width}}{...column.getHeaderProps()}>{column.render('Header')}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {page.map((row, i) => {
+                        prepareRow(row)
+                        return (
+                            <tr {...row.getRowProps()} key={i}>
+                                {row.cells.map(cell => {
+                                    return (
+                                        <td
+                                            {...cell.getCellProps()}
+                                            className={cell.column.id}
+                                            style={{width: cell.column.width}}
+                                        >
+                                            {cell.render('Cell')}
+                                        </td>
+                                    )
+                                })}
+                                <td className="progress-bg"></td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+            <Button disabled={!canPreviousPage} onClick={() => {previousPage()}}>Previous</Button>
+            <Button disabled={!canNextPage} onClick={() => {nextPage()}}>Next</Button>
+        </>
     )
 }
 
