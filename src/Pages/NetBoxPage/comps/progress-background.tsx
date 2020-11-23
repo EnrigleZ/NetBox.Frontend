@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { BoxFileClass, BoxFileLoadingStatusClass } from '../types'
+import { BoxFileClass, BoxFileLoadingStatusEnum } from '../types'
 
 const ProcessBackgroundTD = styled.td`
     position: absolute;
@@ -28,7 +28,7 @@ const ProcessBackgroundTD = styled.td`
 
 type ProcessBackgroundPercentageProps = {
     progress: string | null,
-    status: ("pending" | "loading" | "finished" | ''),
+    status: BoxFileLoadingStatusEnum,
     loadType: ("upload" | "download" | '')
 }
 
@@ -37,7 +37,7 @@ type ProcessBackgroundProps = {
 }
 
 let ProcessBackground: React.FunctionComponent<ProcessBackgroundPercentageProps> = ({ progress, status, loadType }) => {
-    return (<ProcessBackgroundTD style={{width: progress + '%'}} className={`${status} ${loadType}`}/>)
+    return (<ProcessBackgroundTD style={{width: progress + '%'}} className={`${status || ''} ${loadType}`}/>)
 }
 
 ProcessBackground = React.memo(ProcessBackground)
@@ -47,7 +47,7 @@ const DebouncedComp: React.FunctionComponent<ProcessBackgroundProps> = ({ boxFil
     const [enable, setEnable] = React.useState(true)
     const { loadingStatus } = boxFile
     const newProgress = loadingStatus ? loadingStatus.getProgress() : null
-    const status = loadingStatus ? loadingStatus.status || '' : ''
+    const status = loadingStatus ? loadingStatus.status : undefined
     const loadType = loadingStatus ? loadingStatus.loadType || '' : ''
 
     if (enable && newProgress !== progress) {

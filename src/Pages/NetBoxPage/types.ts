@@ -1,3 +1,5 @@
+import { CancelToken, CancelTokenSource } from "axios"
+
 export type NetBoxProps = {
   title?: String
 }
@@ -92,21 +94,24 @@ export class BoxFileClass {
   }
 }
 
+export type BoxFileLoadingStatusEnum = ('pending' | 'loading' | 'finished' | 'canceled' | undefined)
+
 export class BoxFileLoadingStatusClass {
   static LoadingStatusMap: Record<string, BoxFileLoadingStatusClass> = {};
 
   loadType: ('upload' | 'download')
   loadedSize: number
   fileUpload?: File
-  status?: ('pending' | 'loading' | 'finished')
+  status?: BoxFileLoadingStatusEnum
   boxFile?: BoxFileClass
   name: string
   bindId?: string
+  cancelTokenSource?: CancelTokenSource
 
   constructor(
     loadType: ('upload' | 'download'),
     fileUpload: (File | undefined) = undefined,
-    status: ('pending' | 'loading' | 'finished' | undefined) = undefined,
+    status: BoxFileLoadingStatusEnum = undefined,
     name: string = ''
   ) {
     this.loadType = loadType
@@ -144,6 +149,15 @@ export class BoxFileLoadingStatusClass {
     if (!boxFile) return '0'
     const { size } = boxFile
     return size ? (Math.min(100, loadedSize * 100 / size)).toFixed(2) : '0'
+  }
+
+  cancel () {
+    const { cancelTokenSource } = this
+    if (cancelTokenSource) {
+      cancelTokenSource.cancel()
+      this.status = "canceled"
+      this.boxFile?.setLoadingStatus(undefined)
+    }
   }
 }
 

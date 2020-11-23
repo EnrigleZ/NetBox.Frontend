@@ -4,7 +4,7 @@ import { timestampToString, fileSizeToString } from '../../../utils/stringify'
 import { BoxFileClass, BoxFileLoadingStatusClass } from '../types'
 import { downloadFromBoxFile, updateList, deleteBoxFile } from '../logic'
 import { DescriptionComp } from './description-comp'
-import { DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
+import { CloseOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
 import { Divider } from 'antd'
 
 export function getTableData(boxFiles: BoxFileClass[]) {
@@ -45,8 +45,13 @@ export function getTableColumns() {
             Header: 'Actions',
             accessor: (boxFile: BoxFileClass) => {
                 const isReady = boxFile.isReady()
+                const DownloadIcon = isReady ? DownloadOutlined : CloseOutlined
                 return (<div className="action-icons">
-                    <a className={isReady ? '' : 'disabled'}><DownloadOutlined onClick={() => { isReady && downloadFromBoxFile(boxFile) }} color="grey" /></a>
+                    <a className={isReady ? '' : 'disabled'}><DownloadIcon onClick={() => {
+                        if (isReady) downloadFromBoxFile(boxFile)
+                        else if (boxFile.loadingStatus) boxFile.loadingStatus.cancel()
+                        updateList()
+                    }} color="grey" /></a>
                     <Divider type="vertical" />
                     <a><EyeOutlined /></a>
                     <Divider type="vertical" />
