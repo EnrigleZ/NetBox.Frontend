@@ -136,6 +136,13 @@ export class BoxFileLoadingStatusClass {
     formData.append('file_content', fileUpload || '')
     return formData
   }
+
+  getProgress () {
+    const { boxFile, loadedSize } = this
+    if (!boxFile) return '0'
+    const { size } = boxFile
+    return size ? (Math.min(100, loadedSize * 100 / size)).toFixed(2) : '0'
+  }
 }
 
 export type NetBoxFunctionAreaProps = {
