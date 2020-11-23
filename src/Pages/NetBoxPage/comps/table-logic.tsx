@@ -21,9 +21,7 @@ export function getTableColumns() {
         },
         {
             Header: 'Description',
-            accessor: (boxFile: BoxFileClass) => (<div className="progress">
-                {<DescriptionComp boxFile={boxFile} updateList={updateList} />}
-            </div>),
+            accessor: 'description',
             id: "desc",
             width: '35%'
         },

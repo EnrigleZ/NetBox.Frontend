@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { BoxFileClass } from '../types'
 import { getTableData, getTableColumns } from './table-logic'
 import ProgressBackground from './progress-background'
+import { updateList } from '../logic'
 
 const Styles = styled.div`
   /* This is required to make the table full-width */
@@ -131,9 +132,17 @@ const FileTable: React.FunctionComponent<FileTableProps> = ({ data, columns }): 
                 <tbody>
                     {page.map((row, i) => {
                         prepareRow(row)
-                        const boxFile = row.original
+                        const boxFile: BoxFileClass = row.original
                         return (
-                            <tr {...row.getRowProps()} key={i}>
+                            <tr {...row.getRowProps()} key={i} onClick={() => {
+                                if (boxFile.loadingStatus) {
+                                    const { status } = boxFile.loadingStatus
+                                    if (status === "finished" || status === "canceled") {
+                                        boxFile.setLoadingStatus(undefined)
+                                        updateList()
+                                    }
+                                }
+                            }}>
                                 {row.cells.map(cell => {
                                     return (
                                         <td
