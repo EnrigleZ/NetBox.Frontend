@@ -89,7 +89,7 @@ function downloadFromResult(res: AxiosResponse, filename?: string) {
   link.click()
 }
 
-function downloadFromBoxFile(boxFile: BoxFileClass) {
+export function downloadFromBoxFile(boxFile: BoxFileClass) {
   const status = boxFile.prepareDownload()
   const formData = boxFile.getDownloadFormData()
   if (!formData || !status) return
@@ -110,7 +110,7 @@ function downloadFromBoxFile(boxFile: BoxFileClass) {
   })
 }
 
-function deleteBoxFile(boxFile: BoxFileClass) {
+export function deleteBoxFile(boxFile: BoxFileClass) {
   const { loadingStatus } = boxFile
   if (!boxFile.isReady() || loadingStatus && loadingStatus.loadType === 'upload' && loadingStatus.status !== 'finished') {
     return

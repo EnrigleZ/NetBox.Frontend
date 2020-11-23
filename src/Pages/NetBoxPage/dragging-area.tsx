@@ -15,7 +15,7 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ 
   const TRANSITION_TIMEOUT = 300
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout
+    let timeout: any
     const element = ref.current
     if (!element) return
 

@@ -50,7 +50,7 @@ export const DescriptionComp: React.FunctionComponent<DescriptionCompType> = ({ 
       size="small"
       strokeColor={color}
       status={finished ? 'success' : 'active'}
-      format={() => ''}
+      showInfo={false}
     />
   </div>)
 }
