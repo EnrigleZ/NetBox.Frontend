@@ -15,19 +15,27 @@ export function getTableColumns() {
     const columns = [
         {
             Header: 'File name',
-            accessor: (boxFile: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, boxFile)}>{boxFile.name}</a>)
+            accessor: (boxFile: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, boxFile)}>{boxFile.name}</a>),
+            id: 'name'
         },
         {
             Header: 'Description',
-            accessor: (boxFile: BoxFileClass) => (<DescriptionComp boxFile={boxFile} updateList={updateList} />)
+            accessor: (boxFile: BoxFileClass) => (<div className="progress">
+                {<DescriptionComp boxFile={boxFile} updateList={updateList} />}
+            </div>),
+            id: "desc"
         },
         {
             Header: 'Size',
-            accessor: (boxFile: BoxFileClass) => fileSizeToString(boxFile.size, '-')
+            accessor: (boxFile: BoxFileClass) => (<div>
+                {fileSizeToString(boxFile.size, '-')}
+            </div>),
+            id: 'size'
         },
         {
             Header: 'Create time',
-            accessor: (boxFile: BoxFileClass) => timestampToString(boxFile.createdAt, '-')
+            accessor: (boxFile: BoxFileClass) => timestampToString(boxFile.createdAt, '-'),
+            id: 'create'
         },
         {
             Header: 'Actions',
@@ -39,7 +47,8 @@ export function getTableColumns() {
                     <Divider type="vertical" />
                     <a><DeleteOutlined onClick={() => { deleteBoxFile(boxFile) }} /></a>
                 </div>)
-            }
+            },
+            id: 'actions'
         }
     ]
     return columns

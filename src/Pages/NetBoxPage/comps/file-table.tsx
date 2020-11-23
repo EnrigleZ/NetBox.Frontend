@@ -34,10 +34,13 @@ const Styles = styled.div`
       margin: 0;
       padding: 0.5rem;
       border-bottom: 1px solid rgb(240, 240, 240);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
       /* The secret sauce */
       /* Each cell should grow equally */
-      width: 1%;
+    //   width: 1%;
       /* But "collapsed" cells should be as small as possible */
       &.collapse {
         width: 0.0000000001%;
@@ -48,9 +51,18 @@ const Styles = styled.div`
       }
     }
 
-    // th {
-    //     text-align: center
-    // }
+    th.name,
+    td.name {
+        max-width: 200px;
+        text-align: left !important;
+        padding-left: 20px;
+    }
+    th.desc {
+        width: 30%
+    }
+    td.size {
+        max-width: 100px
+    }
   }
 
   .pagination {
@@ -90,12 +102,13 @@ const FileTable: React.FunctionComponent<FileTableProps> = ({ data, columns }): 
         },
         usePagination
     )
+
     return (
         <table {...getTableProps()} className="file-table">
             <thead className="ant-table-thead">
                 <tr>
                     {headers.map(column => (
-                        <th className="ant-table-cell align-center" {...column.getHeaderProps()}>{column.render('Header')}</th>
+                        <th className={`ant-table-cell align-center ${column.id}`} {...column.getHeaderProps()}>{column.render('Header')}</th>
                     ))}
                 </tr>
             </thead>
@@ -105,9 +118,11 @@ const FileTable: React.FunctionComponent<FileTableProps> = ({ data, columns }): 
                     return (
                         <tr {...row.getRowProps()}>
                             {row.cells.map(cell => {
+                                console.log(cell)
                                 return (
                                     <td
                                         {...cell.getCellProps()}
+                                        className={cell.column.id}
                                     >
                                         {cell.render('Cell')}
                                     </td>
