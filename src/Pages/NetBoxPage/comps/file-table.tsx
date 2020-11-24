@@ -28,6 +28,13 @@ const Styles = styled.div`
         }
     }
 
+    tbody {
+        tr:hover {
+          background: #f5f5f5;
+          color: #333;
+        }
+    }
+
     tr {
       transition: background 0.3s;
       transform: scale(1);
@@ -35,10 +42,6 @@ const Styles = styled.div`
       display: inline-flex;
       width: 100%;
 
-      :hover {
-        background: #f5f5f5;
-        color: #333;
-      }
       :last-child {
         td {
           border-bottom: 0;
@@ -50,6 +53,7 @@ const Styles = styled.div`
     td {
       margin: 0;
       padding: 0.72rem;
+      line-height: 30px;
       border-bottom: 1px solid rgb(240, 240, 240);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -67,9 +71,10 @@ const Styles = styled.div`
     th.name,
     td.name {
         text-align: left !important;
-        padding-left: 20px;
+        padding-left: 50px;
         a {
             color: inherit;
+            position: relative;
         }
     }
 
@@ -85,6 +90,12 @@ const Styles = styled.div`
 
   .pagination {
     padding: 0.5rem;
+  }
+  .ext {
+      position: absolute;
+      left: 10px;
+      font-size: 26px;
+      margin-right: 6px;
   }
 `
 

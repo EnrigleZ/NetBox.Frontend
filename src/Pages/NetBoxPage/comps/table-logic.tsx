@@ -1,21 +1,69 @@
 import React from 'react'
+import { Divider } from 'antd'
+import {
+    CloseOutlined,
+    DeleteOutlined,
+    DownloadOutlined,
+    EyeOutlined,
+    FileExcelOutlined,
+    FileImageOutlined,
+    FileMarkdownOutlined,
+    FileOutlined,
+    FilePdfOutlined,
+    FilePptOutlined,
+    FileTextOutlined,
+    FileWordOutlined
+} from '@ant-design/icons'
 
 import { timestampToString, fileSizeToString } from '../../../utils/stringify'
+import { getExtension } from '../../../utils/file'
+
 import { BoxFileClass, BoxFileLoadingStatusClass } from '../types'
 import { downloadFromBoxFile, updateList, deleteBoxFile } from '../logic'
 import { DescriptionComp } from './description-comp'
-import { CloseOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
-import { Divider } from 'antd'
 
 export function getTableData(boxFiles: BoxFileClass[]) {
     return boxFiles
+}
+
+function getExtensionIcon(filename: string = "") {
+    const ext = getExtension(filename)
+    switch (ext) {
+        case 'doc':
+        case 'docx':
+            return (<FileWordOutlined />)
+        case 'md':
+            return (<FileMarkdownOutlined />)
+        case 'ppt':
+        case 'pptx':
+            return (<FilePptOutlined />)
+        case 'txt':
+            return (<FileTextOutlined />)
+        case 'png':
+        case 'jpg':
+        case 'jpeg':
+        case 'bmp':
+            return (<FileImageOutlined />)
+        case 'pdf':
+            return (<FilePdfOutlined />)
+        case 'xlsx':
+        case 'xls':
+        case 'csv':
+        case 'tsv':
+            return (<FileExcelOutlined />)
+        default:
+            return (<FileOutlined />)
+    }
 }
 
 export function getTableColumns() {
     const columns = [
         {
             Header: 'File name',
-            accessor: (boxFile: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, boxFile)}>{boxFile.name}</a>),
+            accessor: (boxFile: BoxFileClass) => (<>
+                <span className="ext">{getExtensionIcon(boxFile.name)}</span>
+                <a onClick={downloadFromBoxFile.bind(null, boxFile)}>{boxFile.name}</a>
+            </>),
             id: 'name',
             width: '35%'
         },
