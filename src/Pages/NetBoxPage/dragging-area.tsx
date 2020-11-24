@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect } from 'react'
 import { Button, Card, Spin, Table } from 'antd'
+import { SyncOutlined } from '@ant-design/icons'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
 import { DeleteBoxFilesAPI } from './api'
@@ -55,22 +56,23 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
   const refresh = () => {
     refreshBoxFiles()
   }
-  const [displayFiles, setDisplayFiles] = React.useState<Array<any>>([])
-  useEffect(() => {
-    setDisplayFiles(boxFiles)
-  }, [setDisplayFiles, boxFiles])
+
   return (
     <>
       <DropFileTooltipWrapper display={isDragging} />
       <Spin spinning={loading}>
-        <Card>
-          <Button onClick={refresh}>Refresh</Button>
-          <Button onClick={onClick}>Clean</Button>
-          {/* <Table
-            dataSource={displayFiles}
-            columns={boxFileTableColumns}
-            rowKey='id'
-          /> */}
+        <Card bordered={false} style={{backgroundColor: 'transparent'}}>
+          <div className="table-circle-button-group">
+            <Button
+              type="ghost"
+              shape="circle"
+              icon={<SyncOutlined />}
+              onClick={refresh}
+              loading={loading}
+            />
+          </div>
+          {/* <Button onClick={refresh}>Refresh</Button>
+          <Button onClick={onClick}>Clean</Button> */}
           <FileTable boxFiles={boxFiles} />
         </Card>
       </Spin>

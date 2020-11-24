@@ -1,8 +1,9 @@
 // @ts-nocheck
-import { Button } from 'antd'
 import React from 'react'
 import { useTable, usePagination } from 'react-table'
 import styled from 'styled-components'
+import { Button } from 'antd'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 
 import { BoxFileClass } from '../types'
 import { getTableData, getTableColumns } from './table-logic'
@@ -21,7 +22,10 @@ const Styles = styled.div`
     color: rgb(128, 128, 128);
 
     thead {
-        background: #fafafa
+        background: #fafafa;
+        th {
+            padding: 0
+        }
     }
 
     tr {
@@ -59,13 +63,23 @@ const Styles = styled.div`
       }
     }
 
-    tr {
-    }
-
     th.name,
     td.name {
         text-align: left !important;
         padding-left: 20px;
+        a {
+            color: #595959;
+        }
+    }
+
+    .action-icons {
+      min-width: 100px;
+      opacity: 0;
+      transition: opacity 0.15s
+    }
+
+    tr:hover .action-icons {
+        opacity: 1.0
     }
 
   .pagination {
@@ -151,8 +165,28 @@ const FileTable: React.FunctionComponent<FileTableProps> = ({ data, columns }): 
                     })}
                 </tbody>
             </table>
-            <Button disabled={!canPreviousPage} onClick={() => {previousPage()}}>Previous</Button>
-            <Button disabled={!canNextPage} onClick={() => {nextPage()}}>Next</Button>
+            <div hidden={!canPreviousPage && !canNextPage} className="bottom-icons">
+                <Button
+                    shape="circle"
+                    type="primary"
+                    icon={<LeftOutlined />}
+                    size="small"
+                    style={{float: 'left'}}
+                    disabled={!canPreviousPage}
+                    onClick={() => { previousPage() }}
+                />
+                <Button
+                    shape="circle"
+                    type="primary"
+                    icon={<RightOutlined />}
+                    size="small"
+                    style={{float: 'right'}}
+                    disabled={!canNextPage}
+                    onClick={() => { nextPage() }}
+                />
+            </div>
+            {/* <Button disabled={!canPreviousPage} onClick={() => {previousPage()}}>Previous</Button>
+            <Button disabled={!canNextPage} onClick={() => {nextPage()}}>Next</Button> */}
         </>
     )
 }
