@@ -44,7 +44,7 @@ const Styles = styled.div`
     th,
     td {
       margin: 0;
-      padding: 0.5rem;
+      padding: 0.72rem;
       border-bottom: 1px solid rgb(240, 240, 240);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -70,15 +70,6 @@ const Styles = styled.div`
 
   .pagination {
     padding: 0.5rem;
-  }
-
-  .progress-bg {
-      position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #ee6666;
-    z-index: -1;
   }
 `
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Divider, message, Modal } from 'antd'
 import { DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
-import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import Axios, { AxiosRequestConfig, AxiosResponse, Cancel } from 'axios'
 
 import { fileSizeToString, timestampToString } from '../../utils/stringify'
 
@@ -75,9 +75,15 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
           message.success((<><b>{data.name}</b> uploaded successfully</>))
 
           resolve(data)
-        }).catch(() => {
+        }).catch((e) => {
           deleteBoxFile_(dummyBoxFile, true)
-          message.error(`Failed to upload file ${status.name}`)
+          let errorMsg
+          if (e.__proto__ === Axios.Cancel.prototype) {
+            errorMsg = (<>Cancelled uploading <b>{status.name}</b></>)
+          } else {
+            errorMsg = (<>Failed to upload file <b>{status.name}</b></>)
+          }
+          message.error(errorMsg)
         })
       })
     })
@@ -116,8 +122,14 @@ export function downloadFromBoxFile(boxFile: BoxFileClass) {
     downloadFromResult(res, status.name)
     status.finish()
     updateList()
-  }).catch(() => {
-    message.error(`Download ${boxFile.name} failed`)
+  }).catch((e) => {
+    let errorMsg
+    if (e.__proto__ === Axios.Cancel.prototype) {
+      errorMsg = (<>Cancelled downloading <b>{boxFile.name}</b></>)
+    } else {
+      errorMsg = (<>Download <b>{boxFile.name}</b> failed</>)
+    }
+    message.error(errorMsg)
   })
 }
 

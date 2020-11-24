@@ -51,5 +51,8 @@ body {
 }
 
 .net-box-page .action-icons a.disabled {
-  color: #555
+  color: #bbb
+}
+.net-box-page .action-icons a.warning {
+  color: #ff7875;
 }

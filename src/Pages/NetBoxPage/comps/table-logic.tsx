@@ -45,7 +45,7 @@ export function getTableColumns() {
                 const isReady = boxFile.isReady()
                 const DownloadIcon = isReady ? DownloadOutlined : CloseOutlined
                 return (<div className="action-icons">
-                    <a className={isReady ? '' : 'disabled'}><DownloadIcon onClick={() => {
+                    <a className={isReady ? '' : 'warning'}><DownloadIcon onClick={() => {
                         if (isReady) downloadFromBoxFile(boxFile)
                         else if (boxFile.loadingStatus) boxFile.loadingStatus.cancel()
                         updateList()
