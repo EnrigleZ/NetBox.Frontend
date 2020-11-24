@@ -17,13 +17,13 @@ export function getTableColumns() {
             Header: 'File name',
             accessor: (boxFile: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, boxFile)}>{boxFile.name}</a>),
             id: 'name',
-            width: '25%'
+            width: '35%'
         },
         {
             Header: 'Description',
             accessor: 'description',
             id: "desc",
-            width: '35%'
+            width: '30%'
         },
         {
             Header: 'Size',

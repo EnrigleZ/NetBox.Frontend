@@ -36,7 +36,8 @@ const Styles = styled.div`
       width: 100%;
 
       :hover {
-        background: #fafafa;
+        background: #f5f5f5;
+        color: #333;
       }
       :last-child {
         td {
@@ -68,7 +69,7 @@ const Styles = styled.div`
         text-align: left !important;
         padding-left: 20px;
         a {
-            color: #595959;
+            color: inherit;
         }
     }
 

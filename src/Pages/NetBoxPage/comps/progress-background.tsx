@@ -17,13 +17,25 @@ const ProcessBackgroundTD = styled.td`
     }
     &.upload.loading {
         background: #ffd6e7;
+        tr:hover & {
+            background: #ffadd2;
+        }
     }
     &.download.loading {
         background: #bae7ff;
+        tr:hover & {
+            background: #91d5ff;
+        }
     }
     &.finished {
         background: #d9f7be;
+        tr:hover & {
+            background: #b7eb8f;
+        }
     }
+    // tr:hover & {
+    //     filter: saturate(100%) brightness(70%)
+    // }
 `
 
 type ProcessBackgroundPercentageProps = {
