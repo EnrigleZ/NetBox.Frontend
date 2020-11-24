@@ -3,8 +3,9 @@ import { Button, Card, Spin, Table } from 'antd'
 
 import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
 import { DeleteBoxFilesAPI } from './api'
-import { boxFileTableColumns } from './logic'
+// import { boxFileTableColumns } from './logic'
 import { TooltipWrapperProps, NetBoxFunctionAreaProps } from './types'
+import FileTable from './comps/file-table'
 
 const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ display }) => {
   const className = 'covered drop-tooltip faded'
@@ -14,7 +15,7 @@ const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ 
   const TRANSITION_TIMEOUT = 300
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout
+    let timeout: any
     const element = ref.current
     if (!element) return
 
@@ -65,11 +66,12 @@ const NetBoxFunctionArea: FunctionComponent<NetBoxFunctionAreaProps & ReceivedCo
         <Card>
           <Button onClick={refresh}>Refresh</Button>
           <Button onClick={onClick}>Clean</Button>
-          <Table
+          {/* <Table
             dataSource={displayFiles}
             columns={boxFileTableColumns}
             rowKey='id'
-          />
+          /> */}
+          <FileTable boxFiles={boxFiles} />
         </Card>
       </Spin>
     </>

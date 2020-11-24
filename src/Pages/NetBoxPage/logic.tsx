@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Divider, message } from 'antd'
 import { DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
-import { AxiosRequestConfig, AxiosResponse } from 'axios'
+import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import { fileSizeToString, timestampToString } from '../../utils/stringify'
 
@@ -12,7 +12,7 @@ import {
   PostDownloadBoxFileAPI
 } from './api'
 import { BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'
-import { DescriptionComp } from './comps'
+import { DescriptionComp } from './comps/description-comp'
 
 export const sharedUpdateListRef = {
   current: () => {}
@@ -42,12 +42,15 @@ export function fileListToUploadStatuses(fileList: FileList) {
 export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
   const promises = statusList.map(status => {
     const formData = status.getUploadFormData()
+    const cancelTokenSource = Axios.CancelToken.source()
+    status.cancelTokenSource = cancelTokenSource
     const config: AxiosRequestConfig = {
       onUploadProgress: progress => {
         status.loadedSize = progress.loaded
         status.status = 'loading'
         updateList()
-      }
+      },
+      cancelToken: cancelTokenSource.token
     }
     return new Promise(resolve => {
       // Only send filename, description to get a bind-id
@@ -62,8 +65,8 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
         }
         // @ts-ignore
         sharedUpdateListRef.current(c => [dummyBoxFile, ...c])
-        return id
-      }).then(() => {
+        return dummyBoxFile
+      }).then((dummyBoxFile) => {
         // second step: upload full file content
         const formData = status.getUploadContentFormData()
         PostBoxFileContentAPI(formData, config).then(({ data }) => {
@@ -72,6 +75,9 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
           message.success((<><b>{data.name}</b> uploaded successfully</>))
 
           resolve(data)
+        }).catch(() => {
+          deleteBoxFile(dummyBoxFile, true)
+          message.error(`Failed to upload file ${status.name}`)
         })
       })
     })
@@ -89,80 +95,85 @@ function downloadFromResult(res: AxiosResponse, filename?: string) {
   link.click()
 }
 
-function downloadFromBoxFile(boxFile: BoxFileClass) {
+export function downloadFromBoxFile(boxFile: BoxFileClass) {
   const status = boxFile.prepareDownload()
   const formData = boxFile.getDownloadFormData()
   if (!formData || !status) return
-
   updateList()
+
+  const cancelTokenSource = Axios.CancelToken.source()
+  status.cancelTokenSource = cancelTokenSource
   const config: AxiosRequestConfig = {
     onDownloadProgress: progress => {
       status.loadedSize = progress.loaded
       status.status = "loading"
       updateList()
     },
-    responseType: 'blob'
+    responseType: 'blob',
+    cancelToken: cancelTokenSource.token
   }
   PostDownloadBoxFileAPI(formData, config).then(res => {
     downloadFromResult(res, status.name)
     status.finish()
     updateList()
+  }).catch(() => {
+    message.error(`Download ${boxFile.name} failed`)
   })
 }
 
-function deleteBoxFile(boxFile: BoxFileClass) {
+export function deleteBoxFile(boxFile: BoxFileClass, force: boolean = false) {
   const { loadingStatus } = boxFile
-  if (!boxFile.isReady() || loadingStatus && loadingStatus.loadType === 'upload' && loadingStatus.status !== 'finished') {
+  if (!force && (!boxFile.isReady() || loadingStatus && loadingStatus.loadType === 'upload' && loadingStatus.status !== 'finished')) {
     return
   }
   const params = { id: boxFile.id }
   DeleteBoxFileAPI(params).then(() => {
     refreshListRef.current()
-    message.success((<>Delete <b>{boxFile.name}</b> successfully.</>))
+    if (!force) message.success((<>Delete <b>{boxFile.name}</b> successfully.</>))
   })
 }
 
-export const boxFileTableColumns = [
-  {
-    title: 'File',
-    key: 'name',
-    render: (record: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, record)} download>
-      <Button type="link" disabled={!record.id}>{record.name}</Button>
-    </a>)
-  },
-  {
-    title: 'Description',
-    key: 'description',
-    width: '30%',
-    render: (record: BoxFileClass) => {
-      return <DescriptionComp boxFile={record} updateList={updateList} />
-    }
-  },
-  {
-    title: 'Size',
-    dataIndex: 'size',
-    render: (size: number) => (<div className="box-file-table-cell">
-      {fileSizeToString(size)}
-    </div>),
-  },
-  {
-    title: 'Upload Time',
-    dataIndex: 'createdAt',
-    render: (timestamp: number) => (<div className="box-file-table-cell">
-      { timestampToString(timestamp) }
-    </div>)
-  },
-  {
-    title: 'Actions',
-    key: 'actions',
-    render: (record: BoxFileClass) => {
-      return (<div className="action-icons">
-        <a><DownloadOutlined onClick={() => {downloadFromBoxFile(record)}} color="grey"/></a>
-        <Divider type="vertical" />
-        <a><EyeOutlined/></a>
-        <Divider type="vertical" />
-        <a><DeleteOutlined onClick={() => {deleteBoxFile(record)}}/></a>
-      </div>)
-    }
-  }
-]
+// export const boxFileTableColumns = [
+//   {
+//     title: 'File',
+//     key: 'name',
+//     render: (record: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, record)} download>
+//       <Button type="link" disabled={!record.id}>{record.name}</Button>
+//     </a>)
+//   },
+//   {
+//     title: 'Description',
+//     key: 'description',
+//     width: '30%',
+//     render: (record: BoxFileClass) => {
+//       return <DescriptionComp boxFile={record} updateList={updateList} />
+//     }
+//   },
+//   {
+//     title: 'Size',
+//     dataIndex: 'size',
+//     render: (size: number) => (<div className="box-file-table-cell">
+//       {fileSizeToString(size)}
+//     </div>),
+//   },
+//   {
+//     title: 'Upload Time',
+//     dataIndex: 'createdAt',
+//     render: (timestamp: number) => (<div className="box-file-table-cell">
+//       { timestampToString(timestamp) }
+//     </div>)
+//   },
+//   {
+//     title: 'Actions',
+//     key: 'actions',
+//     render: (record: BoxFileClass) => {
+//       return (<div className="action-icons">
+//         <a><DownloadOutlined onClick={() => {downloadFromBoxFile(record)}} color="grey"/></a>
+//         <Divider type="vertical" />
+//         <a><EyeOutlined/></a>
+//         <Divider type="vertical" />
+//         <a><DeleteOutlined onClick={() => {deleteBoxFile(record)}}/></a>
+//       </div>)
+//     }
+//   }
+// ]
