@@ -67,14 +67,6 @@ export class BoxFileClass {
     } else {
       delete LoadingStatusMap[this.id]
     }
-    // if (previousStatus) {
-    //   const { LoadingStatusMap } = BoxFileLoadingStatusClass
-    //   const index = LoadingList.indexOf(previousStatus)
-    //   console.log('previous', previousStatus, LoadingList)
-    //   if (index >= 0) {
-    //     LoadingList.splice(index, 1)
-    //   }
-    // }
   }
 
   // TODO: is stopping axios download progress needed

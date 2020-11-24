@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Divider, message } from 'antd'
+import { Button, Divider, message, Modal } from 'antd'
 import { DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
-import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import Axios, { AxiosRequestConfig, AxiosResponse, Cancel } from 'axios'
 
 import { fileSizeToString, timestampToString } from '../../utils/stringify'
 
@@ -75,9 +75,15 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
           message.success((<><b>{data.name}</b> uploaded successfully</>))
 
           resolve(data)
-        }).catch(() => {
-          deleteBoxFile(dummyBoxFile, true)
-          message.error(`Failed to upload file ${status.name}`)
+        }).catch((e) => {
+          deleteBoxFile_(dummyBoxFile, true)
+          let errorMsg
+          if (e.__proto__ === Axios.Cancel.prototype) {
+            errorMsg = (<>Cancelled uploading <b>{status.name}</b></>)
+          } else {
+            errorMsg = (<>Failed to upload file <b>{status.name}</b></>)
+          }
+          message.error(errorMsg)
         })
       })
     })
@@ -116,16 +122,18 @@ export function downloadFromBoxFile(boxFile: BoxFileClass) {
     downloadFromResult(res, status.name)
     status.finish()
     updateList()
-  }).catch(() => {
-    message.error(`Download ${boxFile.name} failed`)
+  }).catch((e) => {
+    let errorMsg
+    if (e.__proto__ === Axios.Cancel.prototype) {
+      errorMsg = (<>Cancelled downloading <b>{boxFile.name}</b></>)
+    } else {
+      errorMsg = (<>Download <b>{boxFile.name}</b> failed</>)
+    }
+    message.error(errorMsg)
   })
 }
 
-export function deleteBoxFile(boxFile: BoxFileClass, force: boolean = false) {
-  const { loadingStatus } = boxFile
-  if (!force && (!boxFile.isReady() || loadingStatus && loadingStatus.loadType === 'upload' && loadingStatus.status !== 'finished')) {
-    return
-  }
+export function deleteBoxFile_(boxFile: BoxFileClass, force: boolean = false) {
   const params = { id: boxFile.id }
   DeleteBoxFileAPI(params).then(() => {
     refreshListRef.current()
@@ -133,47 +141,19 @@ export function deleteBoxFile(boxFile: BoxFileClass, force: boolean = false) {
   })
 }
 
-// export const boxFileTableColumns = [
-//   {
-//     title: 'File',
-//     key: 'name',
-//     render: (record: BoxFileClass) => (<a onClick={downloadFromBoxFile.bind(null, record)} download>
-//       <Button type="link" disabled={!record.id}>{record.name}</Button>
-//     </a>)
-//   },
-//   {
-//     title: 'Description',
-//     key: 'description',
-//     width: '30%',
-//     render: (record: BoxFileClass) => {
-//       return <DescriptionComp boxFile={record} updateList={updateList} />
-//     }
-//   },
-//   {
-//     title: 'Size',
-//     dataIndex: 'size',
-//     render: (size: number) => (<div className="box-file-table-cell">
-//       {fileSizeToString(size)}
-//     </div>),
-//   },
-//   {
-//     title: 'Upload Time',
-//     dataIndex: 'createdAt',
-//     render: (timestamp: number) => (<div className="box-file-table-cell">
-//       { timestampToString(timestamp) }
-//     </div>)
-//   },
-//   {
-//     title: 'Actions',
-//     key: 'actions',
-//     render: (record: BoxFileClass) => {
-//       return (<div className="action-icons">
-//         <a><DownloadOutlined onClick={() => {downloadFromBoxFile(record)}} color="grey"/></a>
-//         <Divider type="vertical" />
-//         <a><EyeOutlined/></a>
-//         <Divider type="vertical" />
-//         <a><DeleteOutlined onClick={() => {deleteBoxFile(record)}}/></a>
-//       </div>)
-//     }
-//   }
-// ]
+export function deleteBoxFile(boxFile: BoxFileClass) {
+  const { loadingStatus } = boxFile
+  if (!boxFile.isReady() || loadingStatus && loadingStatus.loadType === 'upload' && loadingStatus.status !== 'finished') {
+    return
+  }
+
+  Modal.confirm({
+    title: `Confirm to delete ${boxFile.name}?`,
+    onOk: () => {
+      deleteBoxFile_(boxFile)
+    },
+    okText: 'Delete',
+    cancelText: 'Cancel'
+  })
+
+}

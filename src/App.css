@@ -6,6 +6,10 @@ body {
   text-align: center;
 }
 
+.pages-container {
+  background-color: #fafafa;
+}
+
 .draggable-container {
   width: 100%;
   height: 100%
@@ -42,14 +46,21 @@ body {
   z-index: -1;
 }
 
+.net-box-page .table-circle-button-group {
+  text-align: right;
+}
+.net-box-page .bottom-icons {
+  width: 40%;
+  margin: auto;
+}
+
 .net-box-page .box-file-table-cell {
   color: #777
 }
 
-.net-box-page .action-icons {
-  min-width: 100px;
-}
-
 .net-box-page .action-icons a.disabled {
-  color: #555
+  color: #bbb
+}
+.net-box-page .action-icons a.warning {
+  color: #ff7875;
 }

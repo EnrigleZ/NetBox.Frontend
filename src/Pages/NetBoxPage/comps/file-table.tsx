@@ -1,12 +1,14 @@
 // @ts-nocheck
-import { Button } from 'antd'
 import React from 'react'
 import { useTable, usePagination } from 'react-table'
 import styled from 'styled-components'
+import { Button } from 'antd'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 
 import { BoxFileClass } from '../types'
 import { getTableData, getTableColumns } from './table-logic'
 import ProgressBackground from './progress-background'
+import { updateList } from '../logic'
 
 const Styles = styled.div`
   /* This is required to make the table full-width */
@@ -20,7 +22,17 @@ const Styles = styled.div`
     color: rgb(128, 128, 128);
 
     thead {
-        background: #fafafa
+        background: #fafafa;
+        th {
+            padding: 0
+        }
+    }
+
+    tbody {
+        tr:hover {
+          background: #f5f5f5;
+          color: #333;
+        }
     }
 
     tr {
@@ -30,9 +42,6 @@ const Styles = styled.div`
       display: inline-flex;
       width: 100%;
 
-      :hover {
-        background: #fafafa;
-      }
       :last-child {
         td {
           border-bottom: 0;
@@ -43,7 +52,8 @@ const Styles = styled.div`
     th,
     td {
       margin: 0;
-      padding: 0.5rem;
+      padding: 0.72rem;
+      line-height: 30px;
       border-bottom: 1px solid rgb(240, 240, 240);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -58,26 +68,34 @@ const Styles = styled.div`
       }
     }
 
-    tr {
-    }
-
     th.name,
     td.name {
         text-align: left !important;
-        padding-left: 20px;
+        padding-left: 50px;
+        a {
+            color: inherit;
+            position: relative;
+        }
+    }
+
+    .action-icons {
+      min-width: 100px;
+      opacity: 0;
+      transition: opacity 0.15s
+    }
+
+    tr:hover .action-icons {
+        opacity: 1.0
     }
 
   .pagination {
     padding: 0.5rem;
   }
-
-  .progress-bg {
+  .ext {
       position: absolute;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #ee6666;
-    z-index: -1;
+      left: 10px;
+      font-size: 26px;
+      margin-right: 6px;
   }
 `
 
@@ -131,9 +149,17 @@ const FileTable: React.FunctionComponent<FileTableProps> = ({ data, columns }): 
                 <tbody>
                     {page.map((row, i) => {
                         prepareRow(row)
-                        const boxFile = row.original
+                        const boxFile: BoxFileClass = row.original
                         return (
-                            <tr {...row.getRowProps()} key={i}>
+                            <tr {...row.getRowProps()} key={i} onClick={() => {
+                                if (boxFile.loadingStatus) {
+                                    const { status } = boxFile.loadingStatus
+                                    if (status === "finished" || status === "canceled") {
+                                        boxFile.setLoadingStatus(undefined)
+                                        updateList()
+                                    }
+                                }
+                            }}>
                                 {row.cells.map(cell => {
                                     return (
                                         <td
@@ -151,8 +177,28 @@ const FileTable: React.FunctionComponent<FileTableProps> = ({ data, columns }): 
                     })}
                 </tbody>
             </table>
-            <Button disabled={!canPreviousPage} onClick={() => {previousPage()}}>Previous</Button>
-            <Button disabled={!canNextPage} onClick={() => {nextPage()}}>Next</Button>
+            <div hidden={!canPreviousPage && !canNextPage} className="bottom-icons">
+                <Button
+                    shape="circle"
+                    type="primary"
+                    icon={<LeftOutlined />}
+                    size="small"
+                    style={{float: 'left'}}
+                    disabled={!canPreviousPage}
+                    onClick={() => { previousPage() }}
+                />
+                <Button
+                    shape="circle"
+                    type="primary"
+                    icon={<RightOutlined />}
+                    size="small"
+                    style={{float: 'right'}}
+                    disabled={!canNextPage}
+                    onClick={() => { nextPage() }}
+                />
+            </div>
+            {/* <Button disabled={!canPreviousPage} onClick={() => {previousPage()}}>Previous</Button>
+            <Button disabled={!canNextPage} onClick={() => {nextPage()}}>Next</Button> */}
         </>
     )
 }

@@ -21,8 +21,8 @@ const MyLayout: React.FunctionComponent<{}> = ({ children }) => {
       </Header>
       <Layout className="site-layout">
         <MySideMenu />
-        <Layout>
-          <Content style={{ margin: '0 16px' }}>
+        <Layout className="pages-container">
+          <Content style={{ margin: '0' }}>
             { children }
           </Content>
           <Footer style={{ textAlign: 'center' }}>A Weird NetBox ©2020 Created by YC, with Love.</Footer>
