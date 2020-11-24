@@ -1,4 +1,7 @@
-npm run build
+git pull origin
+
+yarn
+yarn build
 
 rm /srv/frontend/ -rf
 mkdir /srv/frontend
