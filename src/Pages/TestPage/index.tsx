@@ -1,33 +1,69 @@
 import React, { FunctionComponent } from 'react'
-import { Button, Card } from 'antd'
+import { Button, Card, Modal, Form, Input, message } from 'antd'
 import Axios from 'axios'
 
+import { JWTAuth } from '../../Request'
+import { PostRegisterUserAPI, GetTestAuthAPI } from './api'
+
 const TestPage: FunctionComponent<any> = () => {
-  const getAllCallback = () => {
-    Axios.get('/test/test-structs/?param1=123').then(res => {
-      console.log(res.data)
+  const usernameRefLogin = React.useRef<Input>(null)
+  const passwordRefLogin = React.useRef<Input>(null)
+  const loginCallback = () => {
+    Modal.confirm({
+      title: "Login",
+      content: (<Form>
+        <Form.Item label="username">
+          <Input ref={usernameRefLogin} />
+        </Form.Item>
+        <Form.Item label="password">
+          <Input ref={passwordRefLogin} />
+        </Form.Item>
+      </Form>),
+      onOk: () => {
+        const username = usernameRefLogin.current?.state.value ?? ''
+        const password = passwordRefLogin.current?.state.value ?? ''
+        JWTAuth.GetInstance()
+          .login({ username, password })
+          .then(() => message.success('Authenticated!'))
+          .catch(() => message.success('Failed'))
+      }
     })
   }
-  const getOneCallback = () => {
-    Axios.get('/test/test-struct/?id=2bd4a72c-67e9-4d76-9d70-c3b5c3330893').then(res => {
-      console.log(res.data)
+  const authTestCallback = () => {
+    GetTestAuthAPI().then(res => {
+      console.log(res)
     })
   }
-  const createOneCallback = () => {
-    const body = {
-      title: 'sample_title',
-      content: 'sample_content with more than seven words.'
-    }
-    Axios.post('/test/test-struct/', body).then(res => {
-      console.log(res.data)
+  const usernameRef = React.useRef<Input>(null)
+  const passwordRef = React.useRef<Input>(null)
+  const registerCallback = () => {
+    Modal.confirm({
+      title: "Create an user",
+      content: (<Form>
+        <Form.Item label="username">
+          <Input ref={usernameRef} />
+        </Form.Item>
+        <Form.Item label="password">
+          <Input ref={passwordRef} />
+        </Form.Item>
+      </Form>),
+      onOk: () => {
+        const username = usernameRef.current?.state.value ?? ''
+        const password = passwordRef.current?.state.value ?? ''
+        const formData = new FormData()
+        formData.append('username', username)
+        formData.append('password', password)
+        console.log(username, password)
+        PostRegisterUserAPI(formData).then(res => {})
+      }
     })
   }
   return (
     <div className="test-page">
       <Card>
-        <Button onClick={createOneCallback}>Add one</Button>
-        <Button onClick={getOneCallback}>Get one</Button>
-        <Button onClick={getAllCallback}>Get all</Button>
+        <Button onClick={registerCallback}>Register</Button>
+        <Button onClick={loginCallback}>Login</Button>
+        <Button onClick={authTestCallback}>Test Auth</Button>
       </Card>
     </div>
   )
