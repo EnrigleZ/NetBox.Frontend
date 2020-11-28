@@ -29,7 +29,7 @@ export class JWTAuth {
   }
 
   login(params: any, showMessage: Boolean = false) {
-    let ret = GetAuthAPI(params).then(res => {
+    let ret = GetLoginAuth(params).then(res => {
       if (res.status === 401) return res
       const { access, refresh, username } = res.data
       this.updateToken(access, refresh, username)
@@ -39,7 +39,6 @@ export class JWTAuth {
     if (showMessage) {
       ret = ret.then(res => {
         message.success("Login successfully")
-        console.log(res)
         return res
       }).catch(res => {
         message.error("Login failed")
@@ -50,7 +49,19 @@ export class JWTAuth {
     return ret
   }
 
-  updateToken(token: (string | null), refreshToken: (string | null), username: (string | null)) {
+  refresh () {
+    if (!this.refreshToken) return Promise.reject()
+
+    const ret = RefreshAuthToken(this.refreshToken)
+      .then(({ data }) => {
+        const { refresh, access } = data
+        this.updateToken(access, refresh)
+      })
+
+    return ret
+  }
+
+  updateToken(token: (string | null), refreshToken: (string | null), username: (string | null) = null) {
     this.token = token
     if (refreshToken) this.refreshToken = refreshToken
     if (username !== null) {
@@ -85,10 +96,18 @@ export class JWTAuth {
   }
 }
 
-const GetAuthAPI = async (params: any) => {
+const GetLoginAuth = async (params: any) => {
   const formData = new FormData()
   for (const key in params) formData.append(key, params[key])
 
   const ret = Axios.post('/api/auth/token', formData)
+  return ret
+}
+
+const RefreshAuthToken = async (refresh: string) => {
+  const formData = new FormData()
+  formData.append('refresh', refresh)
+
+  const ret = Axios.post('/api/auth/refresh', formData)
   return ret
 }

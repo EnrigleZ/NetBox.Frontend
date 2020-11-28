@@ -34,19 +34,40 @@ class HttpRequest {
   }
 
   _checkResponse(res: AxiosResponse, options: RequestConfig) {
-    console.log(res)
     return res
   }
 
   _checkErrorResponse(res: AxiosResponse, options: RequestConfig) {
-    console.log(res)
-    if (res.status === 401 && options.loginOnAuthorized !== false) {
-      message.warn("Show login modal")
+    if (res.status === 401) {
+      const authContext = JWTAuth.GetInstance()
+
+      // TODO: may need a better condition to judge it
+      if (options.needAuth !== false && authContext.refreshToken) {
+        // If this 401 was due to a EXPIRED token,
+        // then auto refresh token and retry the original request.
+        return authContext.refresh().then(() => {
+          const option = {...res.config}
+          return this.request(option)
+        }).catch(() => {
+          // If refresh token failed, user needs to login again.
+          this._openLoginModal()
+          return res
+        })
+      } else {
+        // this 401 was simply non-login.
+        this._openLoginModal()
+      }
+    } else {
+      // Other error status, 404, 500... leave them to callback.
     }
     return res
   }
 
-  processResponse(promise: Promise<AxiosResponse>, options: RequestConfig) {
+  _openLoginModal() {
+    message.warn("Show login modal")
+  }
+
+  processResponse(promise: Promise<AxiosResponse>, options: RequestConfig): Promise<AxiosResponse> {
     return promise
       .then(res => this._checkResponse(res, options))
       .catch(res => this._checkErrorResponse(res, options))
@@ -67,6 +88,13 @@ class HttpRequest {
   async delete(url: string, options: RequestConfig = {}) {
     options.headers = this._getHeaders(options)
     const ret = Axios.delete(url, options)
+    return this.processResponse(ret, options)
+  }
+
+  async request(options: RequestConfig = {}) {
+    if (options && options.headers) delete options.headers
+    options.headers = this._getHeaders(options)
+    const ret = Axios.request(options)
     return this.processResponse(ret, options)
   }
 }
