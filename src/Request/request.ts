@@ -2,12 +2,6 @@ import { message } from 'antd'
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { JWTAuth } from './auth'
 
-Axios.interceptors.response.use((response) => {
-  return response
-}, (error) => {
-  return Promise.reject(error.response)
-})
-
 type RequestConfig = AxiosRequestConfig & {
   needAuth?: boolean,
   loginOnAuthorized?: boolean
@@ -19,6 +13,12 @@ class HttpRequest {
 
   constructor() {
     console.log("Initialize a HttpRequest instance")
+
+    Axios.interceptors.response.use((response) => {
+      return response
+    }, (error) => {
+      return Promise.reject(error.response)
+    })
   }
 
   static GetInstance() {
