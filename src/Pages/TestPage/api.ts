@@ -1,11 +1,9 @@
-import Axios from 'axios'
-
 import HttpRequest from '../../Request'
 
 const request = HttpRequest.GetInstance()
 
 export const PostRegisterUserAPI = async (data: FormData) => {
-  const ret = Axios.post('/api/auth/register', data)
+  const ret = request.post('/api/auth/register', data, { needAuth: false })
   return ret
 }
 

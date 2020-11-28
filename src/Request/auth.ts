@@ -72,8 +72,8 @@ export class JWTAuth {
     return this.token
   }
 
-  _getHeader(headers: any = {}) {
-    if (headers.noAuth || !this.token) {
+  _getHeader(headers: any = {}, needAuth: boolean = true) {
+    if (!needAuth || !this.token) {
       return {...headers}
     } else {
       const token = this._getToken()
