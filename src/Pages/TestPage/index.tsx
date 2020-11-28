@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react'
 import { Button, Card, Modal, Form, Input, message } from 'antd'
-import Axios from 'axios'
 
 import { JWTAuth } from '../../Request'
 import { PostRegisterUserAPI, GetTestAuthAPI } from './api'
@@ -23,9 +22,9 @@ const TestPage: FunctionComponent<any> = () => {
         const username = usernameRefLogin.current?.state.value ?? ''
         const password = passwordRefLogin.current?.state.value ?? ''
         JWTAuth.GetInstance()
-          .login({ username, password })
+          .login({ username, password }, false)
           .then(() => message.success('Authenticated!'))
-          .catch(() => message.success('Failed'))
+          .catch(() => message.error('Failed'))
       }
     })
   }

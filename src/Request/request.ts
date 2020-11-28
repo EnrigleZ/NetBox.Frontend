@@ -2,11 +2,11 @@ import Axios, { AxiosRequestConfig } from 'axios'
 import { JWTAuth } from './auth'
 
 class HttpRequest {
-  
+
   static instance: (HttpRequest | null) = null
 
   constructor() {
-
+    console.log("Initialize a HttpRequest instance")
   }
 
   static GetInstance() {

@@ -1,5 +1,5 @@
-import Axios, { AxiosRequestConfig } from 'axios'
-import qs from 'querystring'
+import { message } from 'antd'
+import Axios from 'axios'
 
 class UserInfo {
   username: string
@@ -28,12 +28,25 @@ export class JWTAuth {
     this.userInfo = null
   }
 
-  login(params: any) {
-    const ret = GetAuthAPI(params).then(res => {
-      if (res.status === 401) return
+  login(params: any, showMessage: Boolean = false) {
+    let ret = GetAuthAPI(params).then(res => {
+      if (res.status === 401) return res
       const { access, refresh, username } = res.data
       this.updateToken(access, refresh, username)
+      return res
     })
+
+    if (showMessage) {
+      ret = ret.then(res => {
+        message.success("Login successfully")
+        console.log(res)
+        return res
+      }).catch(res => {
+        message.error("Login failed")
+        throw res
+      })
+    }
+
     return ret
   }
 
