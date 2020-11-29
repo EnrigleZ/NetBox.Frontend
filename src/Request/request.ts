@@ -13,12 +13,6 @@ class HttpRequest {
 
   constructor() {
     console.log("Initialize a HttpRequest instance")
-
-    Axios.interceptors.response.use((response) => {
-      return response
-    }, (error) => {
-      return Promise.reject(error.response)
-    })
   }
 
   static GetInstance() {
@@ -70,7 +64,7 @@ class HttpRequest {
   processResponse(promise: Promise<AxiosResponse>, options: RequestConfig): Promise<AxiosResponse> {
     return promise
       .then(res => this._checkResponse(res, options))
-      .catch(res => this._checkErrorResponse(res, options))
+      .catch(error => this._checkErrorResponse(error.response, options))
   }
 
   async get(url: string, options: RequestConfig = {}) {
