@@ -1,6 +1,7 @@
 import { message } from 'antd'
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { JWTAuth } from './auth'
+import { openLoginModal } from '../Components/login-modal'
 
 type RequestConfig = AxiosRequestConfig & {
   needAuth?: boolean,
@@ -58,7 +59,7 @@ class HttpRequest {
   }
 
   _openLoginModal() {
-    message.warn("Show login modal")
+    openLoginModal()
   }
 
   processResponse(promise: Promise<AxiosResponse>, options: RequestConfig): Promise<AxiosResponse> {
