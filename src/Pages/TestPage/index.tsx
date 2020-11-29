@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react'
 import { Button, Card, Modal, Form, Input, message } from 'antd'
 
 import { JWTAuth } from '../../Request'
+import { AuthContext } from '../../Contexts/auth-context'
 import { PostRegisterUserAPI, GetTestAuthAPI } from './api'
 
 const TestPage: FunctionComponent<any> = () => {
