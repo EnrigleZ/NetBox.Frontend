@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import Axios from 'axios'
+import { GetLoginAuth, RefreshAuthToken } from './api'
 
 class UserInfo {
   username: string
@@ -94,20 +94,4 @@ export class JWTAuth {
       }
     }
   }
-}
-
-const GetLoginAuth = async (params: any) => {
-  const formData = new FormData()
-  for (const key in params) formData.append(key, params[key])
-
-  const ret = Axios.post('/api/auth/token', formData)
-  return ret
-}
-
-const RefreshAuthToken = async (refresh: string) => {
-  const formData = new FormData()
-  formData.append('refresh', refresh)
-
-  const ret = Axios.post('/api/auth/refresh', formData)
-  return ret
 }
