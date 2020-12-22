@@ -21,16 +21,16 @@ export const MenuItemConfig: Array<MenuItemType> = [{
     icon: React.createElement(DesktopOutlined),
     title: 'My Box'
   },
-  {
-    icon: React.createElement(UserOutlined),
-    title: 'Test Group',
-    children: [
-      {
-        path: 'test-path',
-        title: 'test title'
-      }
-    ]
-  }
+  // {
+  //   icon: React.createElement(UserOutlined),
+  //   title: 'Test Group',
+  //   children: [
+  //     {
+  //       path: 'test-path',
+  //       title: 'test title'
+  //     }
+  //   ]
+  // }
 ]
 
 export function getSelectedKeys (pathname: string, items: Array<MenuItemType> ) {
