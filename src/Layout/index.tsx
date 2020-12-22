@@ -25,7 +25,7 @@ const MyLayout: React.FunctionComponent<{}> = ({ children }) => {
           <Content style={{ margin: '0' }}>
             { children }
           </Content>
-          <Footer style={{ textAlign: 'center' }}>A Weird NetBox ©2020 Created by YC, with Love.</Footer>
+          <Footer style={{ textAlign: 'center' }}>A Simple NetBox ©2020 Created by YC, with Love.</Footer>
         </Layout>
       </Layout>
     </Layout>
