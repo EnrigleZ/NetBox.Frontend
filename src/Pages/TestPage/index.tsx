@@ -10,7 +10,12 @@ const TestPage: FunctionComponent<any> = () => {
   }
   const authTestCallback = () => {
     GetTestAuthAPI().then(res => {
-      console.log(res)
+      const { status } = res
+      if (status === 200) {
+        message.success("Ping successfully.")
+      } else {
+        message.error("Ping failed.")
+      }
     })
   }
   const usernameRef = React.useRef<Input>(null)
