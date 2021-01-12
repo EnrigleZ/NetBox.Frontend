@@ -1,33 +1,12 @@
 import React, { FunctionComponent } from 'react'
 import { Button, Card, Modal, Form, Input, message } from 'antd'
 
-import { JWTAuth } from '../../Request'
-import { AuthContext } from '../../Contexts/auth-context'
+import { openLoginModal } from '../../Components/login-modal'
 import { PostRegisterUserAPI, GetTestAuthAPI } from './api'
 
 const TestPage: FunctionComponent<any> = () => {
-  const usernameRefLogin = React.useRef<Input>(null)
-  const passwordRefLogin = React.useRef<Input>(null)
   const loginCallback = () => {
-    Modal.confirm({
-      title: "Login",
-      content: (<Form>
-        <Form.Item label="username">
-          <Input ref={usernameRefLogin} />
-        </Form.Item>
-        <Form.Item label="password">
-          <Input ref={passwordRefLogin} />
-        </Form.Item>
-      </Form>),
-      onOk: () => {
-        const username = usernameRefLogin.current?.state.value ?? ''
-        const password = passwordRefLogin.current?.state.value ?? ''
-        JWTAuth.GetInstance()
-          .login({ username, password }, false)
-          .then(() => message.success('Authenticated!'))
-          .catch(() => message.error('Failed'))
-      }
-    })
+    openLoginModal()
   }
   const authTestCallback = () => {
     GetTestAuthAPI().then(res => {

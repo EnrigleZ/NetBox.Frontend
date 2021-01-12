@@ -1,10 +1,15 @@
 import React from 'react'
 import { Form, Input } from 'antd'
 
-const LoginModalContent: React.FunctionComponent<any> = () => {
-    const usernameRef = React.useRef<Input>(null)
-    const passwordRef = React.useRef<Input>(null)
+type LoginModalContentProps = {
+    usernameRef: React.RefObject<Input>,
+    passwordRef: React.RefObject<Input>,
+}
 
+const LoginModalContent: React.FunctionComponent<LoginModalContentProps> = ({
+    usernameRef,
+    passwordRef
+}) => {
     return (
         <Form>
             <Form.Item label="Username">
