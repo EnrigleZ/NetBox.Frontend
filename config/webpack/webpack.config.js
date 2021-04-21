@@ -24,9 +24,10 @@ const tsWorkerPool = {
 threadLoader.warmup(jsWorkerPool, ['babel-loader']);
 threadLoader.warmup(tsWorkerPool, ['ts-loader']);
 
+
 module.exports = {
     mode: process.env.NODE_ENV,
-    entry: '../../src/App.tsx',
+    entry: './src/index.tsx',
     module: {
         rules: [{
                 test: /\.(js|mjs|jsx)$/,
@@ -62,37 +63,6 @@ module.exports = {
                     {
                         loader: 'css-loader',
                     },
-                    // {
-                    //     loader: 'postcss-loader',
-                    //     options: {
-                    //         ident: 'postcss',
-                    //         plugins: [
-                    //             require('postcss-import'),
-                    //             require('tailwindcss'),
-                    //             require('postcss-nested'),
-                    //             require('autoprefixer'),
-                    //             postcssToVwAndRem({
-                    //                 enableConvert: true,
-                    //                 rootRemValue: 50,
-                    //                 enableConvertVW: false,
-                    //             }),
-                    //         ],
-                    //     },
-                    // },
-                    // {
-                    //     loader: 'less-loader',
-                    //     options: {
-                    //         lessOptions: {
-                    //             javascriptEnabled: true,
-                    //             modifyVars: {
-                    //                 '@base-font-size': 50,
-                    //                 '@button-ghost-line': '#F85959',
-                    //                 '@button-ghost-text': '#F85959',
-                    //                 '@button-ghost-bg': 'transparent',
-                    //             },
-                    //         },
-                    //     },
-                    // },
                 ],
             },
             {
@@ -115,19 +85,25 @@ module.exports = {
     },
     resolve: {
         extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
-        alias: {
-          src: './src'
-        },
+        // alias: {
+        //   src: './src'
+        // },
         plugins: [
             // 添加即插即用的功能
             PnpWebpackPlugin,
         ],
+        modules: [
+            'node_modules'
+        ]
     },
     resolveLoader: {
         plugins: [
             // 从当前打包更新
             PnpWebpackPlugin.moduleLoader(module),
         ],
+        modules: [
+            'node_modules'
+        ]
     },
     plugins: [
         new webpack.DefinePlugin({
