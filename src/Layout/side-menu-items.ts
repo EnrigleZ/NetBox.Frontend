@@ -20,7 +20,11 @@ export const MenuItemConfig: Array<MenuItemType> = [{
     path: 'box',
     icon: React.createElement(DesktopOutlined),
     title: 'My Box'
-  },
+  }, {
+    path: 'course',
+    icon: React.createElement(UserOutlined),
+    title: 'Course Order',
+  }
   // {
   //   icon: React.createElement(UserOutlined),
   //   title: 'Test Group',
