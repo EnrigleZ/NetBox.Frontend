@@ -1,7 +1,22 @@
 process.env.NODE_ENV = 'development';
 
-// const webpack = require('webpack');
-const merge = require('webpack-merge').merge;
+const path = require('path');
+const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.config');
 
-module.export = merge(baseConfig)
+const devConfig = merge(baseConfig, {
+    mode: 'development',
+    devServer: {
+        port: 3000,
+        contentBase: './build',
+        progress: true,
+        historyApiFallback: true, // 可以直接加载子页面，不会404
+        proxy: {
+            '/api': {
+                target: "http://www.zhouyc.cc"
+            }
+        }
+    }
+})
+
+module.exports = devConfig;
