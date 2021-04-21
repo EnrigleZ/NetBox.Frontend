@@ -1,0 +1,30 @@
+@border-style: #333 solid 1px;
+
+.course-order-page {
+    width: 100%;
+    position: relative;
+    .course-table {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: @border-style;
+        thead {
+            padding: 5px 0;
+            border-bottom: @border-style;
+        }
+        td, th {
+            padding: 1px 10px;
+            border-right: @border-style;
+            &:last-child {
+                border-right: none;
+            }
+        }
+        tr {
+            border-bottom: @border-style;
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}

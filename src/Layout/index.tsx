@@ -22,7 +22,7 @@ const MyLayout: React.FunctionComponent<{}> = ({ children }) => {
       <Layout className="site-layout">
         <MySideMenu />
         <Layout className="pages-container">
-          <Content style={{ margin: '0' }}>
+          <Content style={{ margin: '0', display: 'flex' }}>
             { children }
           </Content>
           <Footer style={{ textAlign: 'center' }}>A Simple NetBox ©2020 Created by YC, with Love.</Footer>

@@ -5,7 +5,7 @@ import 'antd/dist/antd.css'
 import './App.css'
 
 import MyLayout from './Layout'
-import { NetBoxPage, TestPage } from './Pages'
+import { NetBoxPage, TestPage, CourseOrderPage } from './Pages'
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
           <Switch>
             <Route exact path="/test-path" component={TestPage} />
             <Route exact path="/box" component={NetBoxPage} />
+            <Route exact path="/course" component={CourseOrderPage} />
             <Route exact path="/" component={NetBoxPage} />
           </Switch>
         </MyLayout>
