@@ -1,0 +1,130 @@
+const webpack = require('webpack');
+const path = require('path');
+const PnpWebpackPlugin = require('pnp-webpack-plugin'); // 加快加载定位
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const childProcess = require('child_process');
+const threadLoader = require('thread-loader');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+const commitHash = childProcess.execSync('git log -1 HEAD --pretty=format:%H').toString();
+const commitMessage = childProcess.execSync('git log -1 HEAD --pretty=format:%s').toString();
+
+
+const isEnvDevelopment = process.env.NODE_ENV === 'development';
+
+const jsWorkerPool = {
+    workers: 2,
+    poolTimeout: 2000,
+};
+const tsWorkerPool = {
+    workers: 2,
+    poolTimeout: 2000,
+};
+
+threadLoader.warmup(jsWorkerPool, ['babel-loader']);
+threadLoader.warmup(tsWorkerPool, ['ts-loader']);
+
+module.exports = {
+    mode: process.env.NODE_ENV,
+    entry: './src/index.tsx',
+    output: {
+        path: path.resolve(__dirname, '../../build'),
+        filename: 'js/[name].[contenthash:8].js',
+        chunkFilename: 'js/[name].[contenthash:8].chunk.js',
+        clean: true,
+    },
+    module: {
+        rules: [{
+            test: /\.(js|mjs|jsx)$/,
+            exclude: /node_modules/,
+            use: [{
+                loader: 'thread-loader',
+                options: jsWorkerPool,
+            },
+                'babel-loader',
+            ],
+        },
+        {
+            test: /\.(ts|tsx)?$/,
+            exclude: /node_modules/,
+            use: [{
+                loader: 'thread-loader',
+                options: tsWorkerPool,
+            },
+                'babel-loader',
+            {
+                loader: 'ts-loader',
+                options: {
+                    happyPackMode: true,
+                },
+            },
+            ],
+        },
+        {
+            test: /\.(css|less)$/,
+            use: [{
+                loader: isEnvDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+            },
+            {
+                loader: 'css-loader',
+            },
+            ],
+        },
+        {
+            test: /\.(ttf|eot|svg|woff|woff2)(\?.+)?$/,
+            loader: 'url-loader',
+            options: {
+                limit: 8192,
+                name: `/static/media/[hash:8].[ext]`,
+            },
+        },
+        {
+            test: /\.(png|jpg|gif)$/,
+            loader: 'url-loader',
+            options: {
+                limit: 10000,
+                name: `/static/img/[name].[hash:8].[ext]`,
+            },
+        },
+        ],
+    },
+    resolve: {
+        extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
+        // alias: {
+        //   src: './src'
+        // },
+        plugins: [
+            // 添加即插即用的功能
+            PnpWebpackPlugin,
+        ],
+        modules: [
+            'node_modules'
+        ]
+    },
+    resolveLoader: {
+        plugins: [
+            // 从当前打包更新
+            PnpWebpackPlugin.moduleLoader(module),
+        ],
+        modules: [
+            'node_modules'
+        ]
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+        }),
+        new CaseSensitivePathsPlugin(),
+        new HtmlWebpackPlugin({
+            template: './public/index.html',
+            filename: 'index.html',
+            inject: 'body',
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: "css/[name].[hash:8].css",
+            chunkFilename: "css/[id].[hash:8].css"
+        })
+    ]
+};
