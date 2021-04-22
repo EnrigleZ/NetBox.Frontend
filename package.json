@@ -20,6 +20,7 @@
     "antd": "^4.8.3",
     "axios": "^0.21.0",
     "babel-loader": "^8.2.2",
+    "classnames": "^2.3.1",
     "install": "^0.13.0",
     "moment": "^2.29.1",
     "npm": "^7.10.0",
