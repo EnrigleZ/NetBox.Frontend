@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react'
 import { message, Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
+import render from '../../utils/render';
 import { DraggingArea } from './dragging-area'
 import { asyncUploadFiles, fileListToUploadStatuses, refreshListRef, sharedUpdateListRef } from './logic'
 import { GetBoxFilesAPI } from './api'
@@ -79,4 +80,4 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
   )
 }
 
-export default NetBoxPage
+render(<NetBoxPage />);

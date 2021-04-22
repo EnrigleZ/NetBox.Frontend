@@ -17,11 +17,11 @@ export const getMenuItemKey = (path?: string, title?: string) => {
 }
 
 export const MenuItemConfig: Array<MenuItemType> = [{
-    path: 'box',
+    path: 'net-box.html',
     icon: React.createElement(DesktopOutlined),
     title: 'My Box'
   }, {
-    path: 'course',
+    path: 'course-order.html',
     icon: React.createElement(UserOutlined),
     title: 'Course Order',
   }

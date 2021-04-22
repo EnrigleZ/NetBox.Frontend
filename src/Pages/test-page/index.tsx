@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { Button, Card, Modal, Form, Input, message } from 'antd'
+import render from '../../utils/render';
 
 import { openLoginModal } from '../../Components/login-modal'
 import { PostRegisterUserAPI, GetTestAuthAPI } from './api'
@@ -53,4 +54,4 @@ const TestPage: FunctionComponent<any> = () => {
   )
 }
 
-export default TestPage
+render(<TestPage />);
