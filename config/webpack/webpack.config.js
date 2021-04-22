@@ -5,11 +5,11 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const childProcess = require('child_process');
 const threadLoader = require('thread-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const getEntriesAndHtmls = require('./webpack.html');
 
 const commitHash = childProcess.execSync('git log -1 HEAD --pretty=format:%H').toString();
 const commitMessage = childProcess.execSync('git log -1 HEAD --pretty=format:%s').toString();
-
 
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 
@@ -22,18 +22,20 @@ const tsWorkerPool = {
     poolTimeout: 2000,
 };
 
+const { entries, htmls } = getEntriesAndHtmls(process.env.NODE_ENV);
+
 threadLoader.warmup(jsWorkerPool, ['babel-loader']);
 threadLoader.warmup(tsWorkerPool, ['ts-loader']);
 
 module.exports = {
     mode: process.env.NODE_ENV,
-    entry: './src/index.tsx',
-    output: {
-        path: path.resolve(__dirname, '../../build'),
-        filename: 'js/[name].[contenthash:8].js',
-        chunkFilename: 'js/[name].[contenthash:8].chunk.js',
-        clean: true,
-    },
+    entry: entries,
+    // output: {
+    //     path: path.resolve(__dirname, '../../build'),
+    //     filename: 'js/[name].[contenthash:8].js',
+    //     chunkFilename: 'js/[name].[contenthash:8].chunk.js',
+    //     clean: true,
+    // },
     module: {
         rules: [{
             test: /\.(js|mjs|jsx)$/,
@@ -118,17 +120,14 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
         }),
-        new CaseSensitivePathsPlugin(),
-        new HtmlWebpackPlugin({
-            template: './public/index.html',
-            filename: 'index.html',
-            inject: 'body',
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: './build',
         }),
+        new CaseSensitivePathsPlugin(),
         new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
-            filename: "css/[name].[hash:8].css",
-            chunkFilename: "css/[id].[hash:8].css"
-        })
+            filename: "css/[name].[contenthash:8].css",
+            chunkFilename: "css/[id].[contenthash:8].css"
+        }),
+        ...htmls,
     ]
 };

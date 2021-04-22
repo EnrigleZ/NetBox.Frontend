@@ -49,6 +49,7 @@
     "@babel/preset-react": "^7.10.1",
     "@babel/preset-typescript": "^7.13.0",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "css-loader": "^5.2.4",
     "extract-css-chunks-webpack-plugin": "^4.9.0",
     "html-webpack-plugin": "^5.3.1",

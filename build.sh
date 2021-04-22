@@ -1,6 +1,6 @@
 git pull origin
 
-yarn
+yarn --frozen-lockfile
 yarn build
 
 rm /srv/frontend/ -rf

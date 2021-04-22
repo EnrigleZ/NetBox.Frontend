@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Empty, Select } from 'antd';
+import render from '../../utils/render';
 import CourseTable from './comps/course-table';
 import mockData from './mock';
 import './index.less';
@@ -64,4 +65,4 @@ function CourseOrderPage(): JSX.Element {
     </div>)
 }
 
-export default CourseOrderPage
+render(<CourseOrderPage />);

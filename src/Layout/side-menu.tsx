@@ -20,21 +20,19 @@ function mapItemToElement(item: any) {
     return (
       <Menu.Item key={key} icon={icon}>
         { path ? (
-          <Link to={path}>{title}</Link>
+          <a href={path}>{title}</a>
         ) : title}
       </Menu.Item>
     )
   }
 }
 
-const MySideMenu: React.FunctionComponent<RouteComponentProps> = (props: RouteComponentProps) => {
+const MySideMenu: React.FunctionComponent = (props) => {
   const [collapsed, onCollapse] = React.useState(false)
-  const selectedKeys = getSelectedKeys(props.location.pathname, MenuItemConfig)
-
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo" />
-      <Menu theme="dark" selectedKeys={selectedKeys} defaultSelectedKeys={['1']} mode="inline">
+      <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         {MenuItemConfig.map(mapItemToElement)}
       </Menu>
     </Sider>
@@ -42,4 +40,4 @@ const MySideMenu: React.FunctionComponent<RouteComponentProps> = (props: RouteCo
 }
 
 // @ts-ignore
-export default withRouter(MySideMenu)
+export default MySideMenu
