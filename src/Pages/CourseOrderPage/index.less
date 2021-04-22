@@ -3,28 +3,72 @@
 .course-order-page {
     width: 100%;
     position: relative;
-    .course-table {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border: @border-style;
-        thead {
-            padding: 5px 0;
-            border-bottom: @border-style;
+    display: flex;
+    flex-direction: row;
+    .config-area {
+        width: 40%;
+        position: relative;
+        padding: 50px 30px;
+        .config-inner-area {
+            background-color: grey;
+            width: 100%;
+            height: 100%;
+            border-radius: 5%;
+            position: relative;
+            padding-top: 1px;
+            margin-top: -1px;
         }
-        td, th {
-            padding: 1px 10px;
-            border-right: @border-style;
-            &:last-child {
-                border-right: none;
+    }
+    .table-area {
+        width: 60%;
+        position: relative;
+        .select {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 210px;
+        }
+        .table-inner-area {
+            position: absolute;
+            top: 50%;
+            left: 40%;
+            transform: translate(-50%, -50%);
+
+            .table-button {
+                &.upward {
+                    margin-bottom: 30px;
+                }
+                &.downward {
+                    margin-top: 30px;
+                }
+            }
+
+            .course-table {
+                border: @border-style;
+                thead {
+                    padding: 5px 0;
+                    border-bottom: @border-style;
+                }
+                td, th {
+                    padding: 1px 10px;
+                    border-right: @border-style;
+                    &:last-child {
+                        border-right: none;
+                    }
+                }
+                tr {
+                    border-bottom: @border-style;
+                    &:last-child {
+                        border-bottom: none;
+                    }
+                }
             }
         }
-        tr {
-            border-bottom: @border-style;
-            &:last-child {
-                border-bottom: none;
-            }
+        .ant-empty {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 }
