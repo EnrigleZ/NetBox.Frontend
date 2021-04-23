@@ -11,10 +11,13 @@ exports.pages = [
     },
     {
         title: 'Course Presentation Order',
+        shortTitle: 'Course Order',
         name: 'course-order',
     },
     {
-        title: 'Test Page',
+        title: 'A Test Page',
         name: 'test-page',
+        entry: 'whatever/some-test.html',
+        // hidden: true,
     },
 ]
