@@ -8,6 +8,8 @@ import { asyncUploadFiles, fileListToUploadStatuses, refreshListRef, sharedUpdat
 import { GetBoxFilesAPI } from './api'
 import { NetBoxProps, BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'
 
+import './index.less';
+
 const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
   const [boxFiles, setBoxFiles] = React.useState<BoxFileClass[]>([])
   const [loading, setLoading] = React.useState<boolean>(false)
@@ -34,7 +36,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
   // @ts-ignore
   refreshListRef.current = getBoxFiles
 
-  React.useEffect(getBoxFiles, [setBoxFiles, getBoxFiles])
+  React.useEffect(getBoxFiles, [])
 
   const handleFileDrop = (fileList: FileList) => {
     const n = fileList.length

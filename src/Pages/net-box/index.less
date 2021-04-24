@@ -1,0 +1,181 @@
+.net-box-page {
+  height: 100%;
+}
+
+.align-center {
+  text-align: center !important;
+}
+
+.covered {
+  position: absolute;
+  left    : 0;
+  right   : 0;
+  top     : 0;
+  bottom  : 0;
+  width   : 100%;
+  height  : 100%;
+  z-index : 10000;
+}
+
+.drop-tooltip {
+  background-color: rgba(0, 64, 255, 0.3);
+  transition      : all 300ms ease-in-out;
+  z-index         : 10000;
+}
+
+.drop-tooltip.faded {
+  background-color: transparent;
+}
+
+.drop-tooltip.hidden {
+  z-index: -1;
+}
+
+.net-box-page .table-circle-button-group {
+  text-align: right;
+}
+
+.net-box-page .bottom-icons {
+  width : 40%;
+  margin: auto;
+}
+
+.net-box-page .box-file-table-cell {
+  color: #777
+}
+
+.net-box-page .action-icons a.disabled {
+  color: #bbb
+}
+
+.net-box-page .action-icons a.warning {
+  color: #ff7875;
+}
+
+.net-box-page .table-outer-wrapper {
+  /* This is required to make the table full-width */
+  display  : block;
+  max-width: 100%;
+
+  table {
+    /* Make sure the inner table is always as wide as needed */
+    width         : 100%;
+    border-spacing: 0;
+    color         : rgb(128, 128, 128);
+
+    thead {
+      background: #fafafa;
+
+      th {
+        padding: 0
+      }
+    }
+
+    tbody {
+      tr:hover {
+        background: #f5f5f5;
+        color     : #333;
+      }
+    }
+
+    tr {
+      transition: background 0.3s;
+      transform : scale(1);
+      background: transparent;
+      display   : inline-flex;
+      width     : 100%;
+
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    th,
+    td {
+      margin       : 0;
+      padding      : 0.72rem;
+      line-height  : 30px;
+      border-bottom: 1px solid rgb(240, 240, 240);
+      overflow     : hidden;
+      text-overflow: ellipsis;
+      white-space  : nowrap;
+
+      &.collapse {
+        width: 0.0000000001%;
+      }
+
+      :last-child {
+        border-right: 0;
+      }
+    }
+
+    th.name,
+    td.name {
+      text-align  : left !important;
+      padding-left: 50px;
+
+      a {
+        color   : inherit;
+        position: relative;
+      }
+    }
+
+    .action-icons {
+      min-width : 100px;
+      opacity   : 0;
+      transition: opacity 0.15s
+    }
+
+    tr:hover .action-icons {
+      opacity: 1.0
+    }
+
+    .pagination {
+      padding: 0.5rem;
+    }
+
+    .ext {
+      position    : absolute;
+      left        : 10px;
+      font-size   : 26px;
+      margin-right: 6px;
+    }
+  }
+
+  td.background-comp {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    background: transparent;
+    z-index: -1;
+    transition: width 0.5s, background 0.5s;
+    padding: 0 !important;
+
+    &.pending {
+        background: #f9f0ff;
+    }
+    &.upload.loading {
+        background: #ffd6e7;
+        tr:hover & {
+            background: #ffadd2;
+        }
+    }
+    &.download.loading {
+        background: #bae7ff;
+        tr:hover & {
+            background: #91d5ff;
+        }
+    }
+    &.finished {
+        background: #d9f7be;
+        tr:hover & {
+            background: #b7eb8f;
+        }
+    }
+    // tr:hover & {
+    //     filter: saturate(100%) brightness(70%)
+    // }
+  }
+}
