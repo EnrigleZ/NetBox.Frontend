@@ -7,6 +7,5 @@ export function getUrlName() {
 }
 
 export function getFullUrl(pathname: string) {
-    console.log(new URL(pathname, window.location.toString()).href)
     return new URL(pathname, window.location.origin).href;
 }

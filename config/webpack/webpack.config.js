@@ -7,7 +7,7 @@ const threadLoader = require('thread-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const getEntriesAndHtmls = require('./webpack.html');
-const { pages } = require('./pages');
+const { pages } = require('../pages');
 
 const commitHash = childProcess.execSync('git log -1 HEAD --pretty=format:%H').toString();
 const commitMessage = childProcess.execSync('git log -1 HEAD --pretty=format:%s').toString();
@@ -100,21 +100,16 @@ module.exports = {
             // 添加即插即用的功能
             PnpWebpackPlugin,
         ],
-        modules: [
-            'node_modules'
-        ]
     },
     resolveLoader: {
         plugins: [
             // 从当前打包更新
             PnpWebpackPlugin.moduleLoader(module),
         ],
-        modules: [
-            'node_modules'
-        ]
     },
     plugins: [
         new webpack.DefinePlugin({
+            IS_DEV: process.env.NODE_ENV === 'development',
             SITE_PAGES: JSON.stringify(pages.filter(p => !p.isDefaultIndex && !p.hidden)),
         }),
         new CleanWebpackPlugin({

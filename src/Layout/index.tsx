@@ -10,14 +10,18 @@ const logoStyle: CSSProperties = {
   width: "120px",
   height: "31px",
   margin: "16px 0 16px 24px",
-  backgroundColor: "rgba(255, 255, 255, 0.3)"
+  backgroundColor: "rgba(255, 255, 255, 0.3)",
+  lineHeight: "31px",
+  color: "#FFF",
 }
 
 const MyLayout: React.FunctionComponent<{}> = ({ children }) => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ zIndex: 1, width: '100%' }}>
-        <div className="logo" style={logoStyle} />
+        <div className="logo" style={logoStyle}>
+          {IS_DEV ? 'DEV ENV' : 'PROD ENV'}
+        </div>
       </Header>
       <Layout className="site-layout">
         <MySideMenu />

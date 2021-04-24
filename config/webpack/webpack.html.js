@@ -1,4 +1,4 @@
-const routers = require('./pages');
+const routers = require('../pages');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function getEntriesAndHtmls(env = 'production') {

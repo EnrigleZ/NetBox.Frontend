@@ -31,11 +31,9 @@ function mapItemToElement(item: any) {
 const MySideMenu: React.FunctionComponent = () => {
   const [collapsed, onCollapse] = React.useState(false)
   const pathname = useMemo(() => getPathName(), []);
-  console.log(pathname)
 
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <div className="logo" />
       <Menu theme="dark" defaultSelectedKeys={[pathname]} mode="inline">
         {SITE_PAGES.map(mapItemToElement)}
       </Menu>
