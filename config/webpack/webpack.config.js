@@ -7,11 +7,13 @@ const threadLoader = require('thread-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const getEntriesAndHtmls = require('./webpack.html');
+const { pages } = require('../pages');
 
 const commitHash = childProcess.execSync('git log -1 HEAD --pretty=format:%H').toString();
 const commitMessage = childProcess.execSync('git log -1 HEAD --pretty=format:%s').toString();
 
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
+const __cwd = process.cwd();
 
 const jsWorkerPool = {
     workers: 2,
@@ -30,12 +32,6 @@ threadLoader.warmup(tsWorkerPool, ['ts-loader']);
 module.exports = {
     mode: process.env.NODE_ENV,
     entry: entries,
-    // output: {
-    //     path: path.resolve(__dirname, '../../build'),
-    //     filename: 'js/[name].[contenthash:8].js',
-    //     chunkFilename: 'js/[name].[contenthash:8].chunk.js',
-    //     clean: true,
-    // },
     module: {
         rules: [{
             test: /\.(js|mjs|jsx)$/,
@@ -97,28 +93,24 @@ module.exports = {
     },
     resolve: {
         extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
-        // alias: {
-        //   src: './src'
-        // },
+        alias: {
+            '@': path.resolve(__cwd, 'src'),
+        },
         plugins: [
             // 添加即插即用的功能
             PnpWebpackPlugin,
         ],
-        modules: [
-            'node_modules'
-        ]
     },
     resolveLoader: {
         plugins: [
             // 从当前打包更新
             PnpWebpackPlugin.moduleLoader(module),
         ],
-        modules: [
-            'node_modules'
-        ]
     },
     plugins: [
         new webpack.DefinePlugin({
+            IS_DEV: process.env.NODE_ENV === 'development',
+            SITE_PAGES: JSON.stringify(pages.filter(p => !p.isDefaultIndex && !p.hidden)),
         }),
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: './build',
