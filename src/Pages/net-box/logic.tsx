@@ -1,9 +1,6 @@
 import React from 'react'
-import { Button, Divider, message, Modal } from 'antd'
-import { DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons'
+import { message, Modal } from 'antd'
 import Axios, { AxiosRequestConfig, AxiosResponse, Cancel } from 'axios'
-
-import { fileSizeToString, timestampToString } from '../../utils/stringify'
 
 import {
   DeleteBoxFileAPI,
@@ -12,7 +9,6 @@ import {
   PostDownloadBoxFileAPI
 } from './api'
 import { BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'
-import { DescriptionComp } from './comps/description-comp'
 
 export const sharedUpdateListRef = {
   current: () => {}
@@ -55,7 +51,7 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
     return new Promise(resolve => {
       // Only send filename, description to get a bind-id
       updateList()
-      PostBoxFileAPI(formData, {}).then(({ data }) => {
+      PostBoxFileAPI(formData).then(({ data }) => {
         const { id }: ResponseFileType = data
         status.bindId = id
         const dummyBoxFile = BoxFileClass.FromResponseData(data)
@@ -69,7 +65,9 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
       }).then((dummyBoxFile) => {
         // second step: upload full file content
         const formData = status.getUploadContentFormData()
-        PostBoxFileContentAPI(formData, config).then(({ data }) => {
+        PostBoxFileContentAPI(formData, {
+          axiosRequestConfig: config,
+        }).then(({ data }) => {
           status.finish()
           updateList()
           message.success((<><b>{data.name}</b> uploaded successfully</>))
@@ -118,7 +116,9 @@ export function downloadFromBoxFile(boxFile: BoxFileClass) {
     responseType: 'blob',
     cancelToken: cancelTokenSource.token
   }
-  PostDownloadBoxFileAPI(formData, config).then(res => {
+  PostDownloadBoxFileAPI(formData, {
+    axiosRequestConfig: config,
+  }).then(res => {
     downloadFromResult(res, status.name)
     status.finish()
     updateList()

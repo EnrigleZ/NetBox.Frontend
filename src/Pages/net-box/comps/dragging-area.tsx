@@ -2,16 +2,14 @@ import React, { FunctionComponent, useEffect } from 'react'
 import { Button, Card, Spin, Table } from 'antd'
 import { SyncOutlined } from '@ant-design/icons'
 
-import { withDraggable, ReceivedComponentProps } from '../../Containers/draggable-wrapper'
-import { DeleteBoxFilesAPI } from './api'
-// import { boxFileTableColumns } from './logic'
-import { TooltipWrapperProps, NetBoxFunctionAreaProps } from './types'
-import FileTable from './comps/file-table'
+import { withDraggable, ReceivedComponentProps } from '../../../Containers/draggable-wrapper'
+import { DeleteBoxFilesAPI } from '../api'
+import { TooltipWrapperProps, NetBoxFunctionAreaProps } from '../types'
+import FileTable from './file-table'
 
 const DropFileTooltipWrapper: React.FunctionComponent<TooltipWrapperProps> = ({ display }) => {
   const className = 'covered drop-tooltip faded'
   const ref = React.useRef<HTMLDivElement>(null)
-  // const [hidden, setHidden] = React.useState<boolean>(true)
 
   const TRANSITION_TIMEOUT = 300
 

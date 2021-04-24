@@ -2,8 +2,8 @@ import React, { FunctionComponent } from 'react'
 import { message, Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
-import render from '../../utils/render';
-import { DraggingArea } from './dragging-area'
+import render from '@/utils/render';
+import { DraggingArea } from './comps/dragging-area'
 import { asyncUploadFiles, fileListToUploadStatuses, refreshListRef, sharedUpdateListRef } from './logic'
 import { GetBoxFilesAPI } from './api'
 import { NetBoxProps, BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'

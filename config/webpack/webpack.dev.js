@@ -13,7 +13,7 @@ const devConfig = merge(baseConfig, {
         historyApiFallback: true, // 可以直接加载子页面，不会404
         proxy: {
             '/api': {
-                target: "http://127.0.0.1:8000"
+                target: "http://www.zhouyc.cc"
             }
         }
     }
