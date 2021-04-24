@@ -18,9 +18,8 @@ import {
 import { timestampToString, fileSizeToString } from '../../../utils/stringify'
 import { getExtension } from '../../../utils/file'
 
-import { BoxFileClass, BoxFileLoadingStatusClass } from '../types'
+import { BoxFileClass } from '../types'
 import { downloadFromBoxFile, updateList, deleteBoxFile } from '../logic'
-import { DescriptionComp } from './description-comp'
 
 export function getTableData(boxFiles: BoxFileClass[]) {
     return boxFiles

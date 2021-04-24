@@ -1,12 +1,8 @@
-import { message } from 'antd'
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { JWTAuth } from './auth'
+import { IRequestConfig } from './interface';
 import { openLoginModal } from '../Components/login-modal'
 
-type RequestConfig = AxiosRequestConfig & {
-  needAuth?: boolean,
-  loginOnAuthorized?: boolean
-}
 
 class HttpRequest {
 
@@ -23,16 +19,19 @@ class HttpRequest {
     return this.instance
   }
 
-  _getHeaders(options: RequestConfig) {
+  _getHeaders(options: IRequestConfig) {
     const authContext = JWTAuth.GetInstance()
-    return authContext._getHeader(options.headers, options.needAuth)
+    return authContext._getHeader(
+      options?.axiosRequestConfig?.headers,
+      options.needAuth,
+    )
   }
 
-  _checkResponse(res: AxiosResponse, options: RequestConfig) {
+  _checkResponse(res: AxiosResponse, options: IRequestConfig) {
     return res
   }
 
-  _checkErrorResponse(res: AxiosResponse, options: RequestConfig) {
+  _checkErrorResponse(res: AxiosResponse, options: IRequestConfig) {
     if (res.status === 401) {
       const authContext = JWTAuth.GetInstance()
 
@@ -41,8 +40,8 @@ class HttpRequest {
         // If this 401 was due to a EXPIRED token,
         // then auto refresh token and retry the original request.
         return authContext.refresh().then(() => {
-          const option = {...res.config}
-          return this.request(option)
+          const opt = {...options, axiosRequestConfig: res.config}
+          return this.request(opt)
         }).catch(() => {
           // If refresh token failed, user needs to login again.
           this._openLoginModal()
@@ -62,34 +61,41 @@ class HttpRequest {
     openLoginModal()
   }
 
-  processResponse(promise: Promise<AxiosResponse>, options: RequestConfig): Promise<AxiosResponse> {
+  processResponse(promise: Promise<AxiosResponse>, options: IRequestConfig): Promise<AxiosResponse> {
     return promise
       .then(res => this._checkResponse(res, options))
       .catch(error => this._checkErrorResponse(error.response, options))
   }
 
-  async get(url: string, options: RequestConfig = {}) {
-    options.headers = this._getHeaders(options)
-    const ret = Axios.get(url, options)
+  setHeader(options: IRequestConfig = {}) {
+    options.axiosRequestConfig = options.axiosRequestConfig || {};
+    options.axiosRequestConfig.headers = this._getHeaders(options);
+  }
+
+  async get(url: string, options: IRequestConfig = {}) {
+    this.setHeader(options);
+    const ret = Axios.get(url, options.axiosRequestConfig)
     return this.processResponse(ret, options)
   }
 
-  async post(url: string, data?: FormData, options: RequestConfig = {}) {
-    options.headers = this._getHeaders(options)
-    const ret = Axios.post(url, data, options)
+  async post(url: string, data?: FormData, options: IRequestConfig = {}) {
+    this.setHeader(options);
+    const ret = Axios.post(url, data, options.axiosRequestConfig)
     return this.processResponse(ret, options)
   }
 
-  async delete(url: string, options: RequestConfig = {}) {
-    options.headers = this._getHeaders(options)
-    const ret = Axios.delete(url, options)
+  async delete(url: string, options: IRequestConfig = {}) {
+    this.setHeader(options);
+    const ret = Axios.delete(url, options.axiosRequestConfig)
     return this.processResponse(ret, options)
   }
 
-  async request(options: RequestConfig = {}) {
-    if (options && options.headers) delete options.headers
-    options.headers = this._getHeaders(options)
-    const ret = Axios.request(options)
+  async request(options: IRequestConfig = {}) {
+    if (options.axiosRequestConfig?.headers) {
+      delete options.axiosRequestConfig?.headers
+    }
+    this.setHeader(options);
+    const ret = Axios.request(options.axiosRequestConfig || {})
     return this.processResponse(ret, options)
   }
 }

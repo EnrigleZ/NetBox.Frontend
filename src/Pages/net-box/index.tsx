@@ -2,11 +2,13 @@ import React, { FunctionComponent } from 'react'
 import { message, Modal } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 
-import render from '../../utils/render';
-import { DraggingArea } from './dragging-area'
+import render from '@/utils/render';
+import { DraggingArea } from './comps/dragging-area'
 import { asyncUploadFiles, fileListToUploadStatuses, refreshListRef, sharedUpdateListRef } from './logic'
 import { GetBoxFilesAPI } from './api'
 import { NetBoxProps, BoxFileClass, BoxFileLoadingStatusClass, ResponseFileType } from './types'
+
+import './index.less';
 
 const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
   const [boxFiles, setBoxFiles] = React.useState<BoxFileClass[]>([])
@@ -34,7 +36,7 @@ const NetBoxPage: FunctionComponent<NetBoxProps> = () => {
   // @ts-ignore
   refreshListRef.current = getBoxFiles
 
-  React.useEffect(getBoxFiles, [setBoxFiles, getBoxFiles])
+  React.useEffect(getBoxFiles, [])
 
   const handleFileDrop = (fileList: FileList) => {
     const n = fileList.length

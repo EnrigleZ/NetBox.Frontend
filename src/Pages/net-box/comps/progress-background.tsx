@@ -1,42 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
-
 import { BoxFileClass, BoxFileLoadingStatusEnum } from '../types'
 
-const ProcessBackgroundTD = styled.td`
-    position: absolute;
-    left: 0;
-    height: 100%;
-    background: transparent;
-    z-index: -1;
-    transition: width 0.5s, background 0.5s;
-    padding: 0 !important;
-
-    &.pending {
-        background: #f9f0ff;
-    }
-    &.upload.loading {
-        background: #ffd6e7;
-        tr:hover & {
-            background: #ffadd2;
-        }
-    }
-    &.download.loading {
-        background: #bae7ff;
-        tr:hover & {
-            background: #91d5ff;
-        }
-    }
-    &.finished {
-        background: #d9f7be;
-        tr:hover & {
-            background: #b7eb8f;
-        }
-    }
-    // tr:hover & {
-    //     filter: saturate(100%) brightness(70%)
-    // }
-`
 
 type ProcessBackgroundPercentageProps = {
     progress: string | null,
@@ -49,7 +13,7 @@ type ProcessBackgroundProps = {
 }
 
 let ProcessBackground: React.FunctionComponent<ProcessBackgroundPercentageProps> = ({ progress, status, loadType }) => {
-    return (<ProcessBackgroundTD style={{width: progress + '%'}} className={`${status || ''} ${loadType}`}/>)
+    return (<td style={{width: progress + '%'}} className={`background-comp ${status || ''} ${loadType}`}/>)
 }
 
 ProcessBackground = React.memo(ProcessBackground)

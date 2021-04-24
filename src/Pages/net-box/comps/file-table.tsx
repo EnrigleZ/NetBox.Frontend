@@ -11,92 +11,6 @@ import ProgressBackground from './progress-background'
 import { updateList } from '../logic'
 
 const Styles = styled.div`
-  /* This is required to make the table full-width */
-  display: block;
-  max-width: 100%;
-
-  table {
-    /* Make sure the inner table is always as wide as needed */
-    width: 100%;
-    border-spacing: 0;
-    color: rgb(128, 128, 128);
-
-    thead {
-        background: #fafafa;
-        th {
-            padding: 0
-        }
-    }
-
-    tbody {
-        tr:hover {
-          background: #f5f5f5;
-          color: #333;
-        }
-    }
-
-    tr {
-      transition: background 0.3s;
-      transform: scale(1);
-      background: transparent;
-      display: inline-flex;
-      width: 100%;
-
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.72rem;
-      line-height: 30px;
-      border-bottom: 1px solid rgb(240, 240, 240);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-
-      &.collapse {
-        width: 0.0000000001%;
-      }
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-
-    th.name,
-    td.name {
-        text-align: left !important;
-        padding-left: 50px;
-        a {
-            color: inherit;
-            position: relative;
-        }
-    }
-
-    .action-icons {
-      min-width: 100px;
-      opacity: 0;
-      transition: opacity 0.15s
-    }
-
-    tr:hover .action-icons {
-        opacity: 1.0
-    }
-
-  .pagination {
-    padding: 0.5rem;
-  }
-  .ext {
-      position: absolute;
-      left: 10px;
-      font-size: 26px;
-      margin-right: 6px;
-  }
 `
 
 type FileTableProps = {
@@ -212,11 +126,9 @@ const FileTableContainer: React.FunctionComponent<FileTableContainerProps> = ({ 
     const columns = React.useMemo(() => getTableColumns(), [])
 
     return (
-        <Styles>
-            <div className="tableWrap">
-                <FileTable data={tableData} columns={columns} />
-            </div>
-        </Styles>
+        <div className="table-outer-wrapper">
+            <FileTable data={tableData} columns={columns} />
+        </div>
     )
 }
 
