@@ -11,6 +11,7 @@ const { pages } = require('../pages');
 
 const commitHash = childProcess.execSync('git log -1 HEAD --pretty=format:%H').toString();
 const commitMessage = childProcess.execSync('git log -1 HEAD --pretty=format:%s').toString();
+const branchName = childProcess.execSync('git rev-parse --abbrev-ref HEAD').toString();
 
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const __cwd = process.cwd();
@@ -113,6 +114,7 @@ module.exports = {
             SITE_PAGES: JSON.stringify(pages.filter(p => !p.isDefaultIndex && !p.hidden)),
             COMMIT_HASH: JSON.stringify(commitHash),
             COMMIT_MESSAGE: JSON.stringify(commitMessage),
+            BUILD_BRANCH: JSON.stringify(branchName),
         }),
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: './build',
