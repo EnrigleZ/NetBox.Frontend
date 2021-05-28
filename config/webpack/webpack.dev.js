@@ -3,6 +3,9 @@ process.env.NODE_ENV = 'development';
 const path = require('path');
 const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.config');
+const ENV = require('../env');
+
+console.log(ENV);
 
 const devConfig = merge(baseConfig, {
     mode: 'development',
@@ -13,7 +16,7 @@ const devConfig = merge(baseConfig, {
         historyApiFallback: true, // 可以直接加载子页面，不会404
         proxy: {
             '/api': {
-                target: "http://www.zhouyc.cc"
+                target: ENV.API_PROXY,
             }
         }
     }
