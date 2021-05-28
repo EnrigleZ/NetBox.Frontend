@@ -20,4 +20,9 @@ exports.pages = [
         entry: 'whatever/some-test.html',
         // hidden: true,
     },
+    {
+        title: 'MTS Demo',
+        name: 'baidu-mts',
+        entry: 'baidu-mts-demo.html',
+    }
 ]

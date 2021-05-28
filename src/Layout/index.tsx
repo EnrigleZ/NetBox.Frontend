@@ -45,7 +45,9 @@ const MyLayout: React.FunctionComponent<{}> = ({ children }) => {
           <Content style={{ margin: '0', display: 'flex' }}>
             { children }
           </Content>
-          <Footer style={{ textAlign: 'center' }}>A Simple NetBox ©2020 Created by YC, with Love.</Footer>
+          <Footer style={{ textAlign: 'center' }}>
+            A Simple NetBox ©<s>2020</s> 2021 Created by YC<s>, with Love</s>.
+          </Footer>
         </Layout>
       </Layout>
     </Layout>
