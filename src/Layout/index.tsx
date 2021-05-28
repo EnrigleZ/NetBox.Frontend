@@ -1,5 +1,5 @@
-import React, { CSSProperties } from 'react'
-import { Layout } from 'antd'
+import React, { CSSProperties, useCallback } from 'react'
+import { Layout, Modal } from 'antd'
 
 import MySideMenu from './side-menu'
 
@@ -13,13 +13,29 @@ const logoStyle: CSSProperties = {
   backgroundColor: "rgba(255, 255, 255, 0.3)",
   lineHeight: "31px",
   color: "#FFF",
+  cursor: 'pointer',
 }
 
 const MyLayout: React.FunctionComponent<{}> = ({ children }) => {
+  const showMetaModelCallback = useCallback(() => {
+    Modal.confirm({
+      title: 'Meta Information',
+      content: (<div>
+        <b>Commit Hash:</b>
+        <br/>
+        <span>{COMMIT_HASH}</span>
+        <br />
+        <b>Commit Message:</b>
+        <br/>
+        <span>{COMMIT_MESSAGE}</span>
+      </div>)
+    })
+  }, []);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ zIndex: 1, width: '100%' }}>
-        <div className="logo" style={logoStyle}>
+        <div className="logo" style={logoStyle} onClick={showMetaModelCallback}>
           {IS_DEV ? 'DEV ENV' : 'PROD ENV'}
         </div>
       </Header>

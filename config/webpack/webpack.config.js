@@ -111,6 +111,8 @@ module.exports = {
         new webpack.DefinePlugin({
             IS_DEV: process.env.NODE_ENV === 'development',
             SITE_PAGES: JSON.stringify(pages.filter(p => !p.isDefaultIndex && !p.hidden)),
+            COMMIT_HASH: JSON.stringify(commitHash),
+            COMMIT_MESSAGE: JSON.stringify(commitMessage),
         }),
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: './build',
