@@ -12,3 +12,8 @@ export const GetTreeIndex = async (params) => {
     const ret = request.get(`/api/mts/tree?${qs.stringify(params)}`);
     return ret;
 }
+
+export const PostCreateRandomTree = async (params) => {
+    const ret = request.post('api/mts/generate-random-tree/', params);
+    return ret;
+}
