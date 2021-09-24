@@ -52,6 +52,10 @@ class HttpRequest {
         this._openLoginModal()
       }
     } else {
+      if (res.status === 500) {
+        console.log('error status 500 detected')
+        return Promise.reject(res)
+      }
       // Other error status, 404, 500... leave them to callback.
     }
     return res

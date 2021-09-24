@@ -51,7 +51,9 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
     return new Promise(resolve => {
       // Only send filename, description to get a bind-id
       updateList()
-      PostBoxFileAPI(formData).then(({ data }) => {
+      PostBoxFileAPI(formData).then((res: AxiosResponse<any>) => {
+        const { data } = res;
+        console.log('post box file: ', res)
         const { id }: ResponseFileType = data
         status.bindId = id
         const dummyBoxFile = BoxFileClass.FromResponseData(data)
@@ -62,7 +64,8 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
         // @ts-ignore
         sharedUpdateListRef.current(c => [dummyBoxFile, ...c])
         return dummyBoxFile
-      }).then((dummyBoxFile) => {
+      })
+      .then((dummyBoxFile) => {
         // second step: upload full file content
         const formData = status.getUploadContentFormData()
         PostBoxFileContentAPI(formData, {
@@ -83,6 +86,10 @@ export function asyncUploadFiles(statusList: BoxFileLoadingStatusClass[]) {
           }
           message.error(errorMsg)
         })
+      })
+      .catch(res => {
+        message.error('上传文件失败');
+        console.log(res)
       })
     })
   })
