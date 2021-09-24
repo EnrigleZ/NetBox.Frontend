@@ -28,6 +28,10 @@ const MyLayout: React.FunctionComponent<{}> = ({ children }) => {
         <b>Commit Message:</b>
         <br/>
         <span>{COMMIT_MESSAGE}</span>
+        <br />
+        <b>Build Branch:</b>
+        <br/>
+        <span>{BUILD_BRANCH}</span>
       </div>)
     })
   }, []);

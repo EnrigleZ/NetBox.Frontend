@@ -33,6 +33,7 @@
     "react-refresh": "^0.8.3",
     "react-router-dom": "^5.2.0",
     "react-table": "^7.6.2",
+    "react-tree-graph": "^6.0.0",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
     "sass-loader": "^10.0.5",
