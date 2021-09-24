@@ -18,11 +18,17 @@ exports.pages = [
         title: 'A Test Page',
         name: 'test-page',
         entry: 'whatever/some-test.html',
-        // hidden: true,
+        hidden: true,
     },
     {
         title: 'MTS Demo',
         name: 'baidu-mts',
         entry: 'baidu-mts-demo.html',
+        hidden: true,
+    },
+    {
+        title: 'Clipboard',
+        name: 'clipboard',
+        entry: 'clipboard.html',
     }
 ]
