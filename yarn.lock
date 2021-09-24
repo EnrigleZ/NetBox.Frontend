@@ -7411,9 +7411,9 @@ react-router@5.2.0:
     tiny-warning "^1.0.0"
 
 react-table@^7.6.2:
-  version "7.6.3"
-  resolved "https://registry.npm.taobao.org/react-table/download/react-table-7.6.3.tgz#76434392b3f62344bdb704f5b227c2f29c1ffb14"
-  integrity sha1-dkNDkrP2I0S9twT1sifC8pwf+xQ=
+  version "7.7.0"
+  resolved "https://registry.nlark.com/react-table/download/react-table-7.7.0.tgz#e2ce14d7fe3a559f7444e9ecfe8231ea8373f912"
+  integrity sha1-4s4U1/46VZ90ROns/oIx6oNz+RI=
 
 react-tree-graph@^6.0.0:
   version "6.0.0"
