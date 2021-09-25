@@ -1,16 +1,20 @@
 import React, { FunctionComponent } from 'react';
-import { Card } from 'antd';
+import { Card, Empty } from 'antd';
+
+import './index.less';
 
 const TextItem: FunctionComponent<any> = (props) => {
-    const { text, id } = props;
-    return <div>{text}</div>
+    const { content, id } = props;
+    return <div className="item">{content}</div>
 }
 
 const ItemList: FunctionComponent<any> = (props) => {
-    const {items} = props;
-    return (<Card title="Records">{
-        items.map(item => (<TextItem key={item.id} {...item} />))
-    }</Card>)
+    const { items } = props;
+    return (<Card className="note-item-list" title="Records">
+        {items.length > 0 ? (
+            items.map(item => (<TextItem key={item.id} {...item} />))
+        ) : <Empty />}
+    </Card>)
 }
 
 export default ItemList;

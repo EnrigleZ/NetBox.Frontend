@@ -4,14 +4,15 @@ const request = HttpRequest.GetInstance()
 
 export const PostImage = async (data: FormData) => {
     const ret = request.post('/api/image/create', data);
+    return ret;
 }
 
-export const PostRegisterUserAPI = async (data: FormData) => {
-  const ret = request.post('/api/auth/register', data, { needAuth: false })
-  return ret
+export const PostNote = async (data: FormData) => {
+    const ret = request.post('/api/note/create', data);
+    return ret;
 }
 
-export const GetTestAuthAPI = async () => {
-  const ret = request.get('/api/auth/test')
-  return ret
+export const GetNotes = async () => {
+    const ret = request.get('/api/note/list');
+    return ret;
 }
