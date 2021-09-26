@@ -9,7 +9,7 @@ import { GetNotes } from './api';
 const ClipboardPage: FunctionComponent<any> = () => {
     const [notes, setNotes] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [isDetail, setDetail] = useState<boolean>(true);
+    const [isDetail, setDetail] = useState<boolean>(false);
 
     const updateNoteList = useCallback(() => {
         setLoading(true);
