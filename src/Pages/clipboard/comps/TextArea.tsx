@@ -8,6 +8,7 @@ const { TextArea } = Input;
 const ClipBoardTextArea: FunctionComponent<any> = (props) => {
     const { onUpdate } = props;
     const [text, setText] = useState<string>("");
+    const [title, setTitle] = useState<string>("");
     const [imageIds, setImageIds] = useState<string[]>([]);
     const imageUrls = useMemo(() => imageIds.map(id => `/api/image/image?id=${id}`), [imageIds]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -51,7 +52,7 @@ const ClipBoardTextArea: FunctionComponent<any> = (props) => {
 
     const onSubmit = useCallback(() => {
         const formData = new FormData();
-        formData.append('title', new Date().toISOString());
+        formData.append('title', title || new Date().toISOString());
         formData.append('content', text);
         formData.append('image_ids', imageIds.join(' '));
 
@@ -61,6 +62,7 @@ const ClipBoardTextArea: FunctionComponent<any> = (props) => {
             console.log(res);
             message.success('post note successfully');
             setText('');
+            setTitle('');
             setImageIds([]);
         }).catch(res => {
             console.log(res);
@@ -69,9 +71,16 @@ const ClipBoardTextArea: FunctionComponent<any> = (props) => {
             setLoading(false);
             onUpdate();
         });
-    }, [text, imageIds]);
+    }, [text, title, imageIds]);
 
     return (<Card className="text-card" title="Paste here" onPaste={onPaste}>
+        <Input
+            className="title-input"
+            addonBefore="Title"
+            placeholder="给笔记起个名字吗?"
+            value={title}
+            onChange={(e) => { setTitle(e.target.value); }}
+        />
         <TextArea
             value={text}
             onChange={onChange}

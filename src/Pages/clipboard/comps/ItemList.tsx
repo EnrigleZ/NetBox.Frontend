@@ -4,17 +4,17 @@ import { timestampToString } from '../../../utils/stringify'
 
 import './index.less';
 
-const TextItem: FunctionComponent<any> = (props) => {
-    const { content, id, title, updated_at } = props;
-    return <div className="item">
+const TextItem: FunctionComponent<any> = React.memo((props) => {
+    const { content, id, title, updated_at, onClick } = props;
+    return <div className="item" onClick={() => { onClick(id); }}>
         <div className="title">{title}</div>
         <div className="content">{content}</div>
         <div className="time">{timestampToString(updated_at)}</div>
     </div>
-}
+});
 
 const ItemList: FunctionComponent<any> = (props) => {
-    const { items, loading, onUpdate } = props;
+    const { items, loading, onUpdate, onItemClick } = props;
     const button = (<Button
         type="primary"
         onClick={onUpdate}
@@ -27,7 +27,7 @@ const ItemList: FunctionComponent<any> = (props) => {
         loading={loading}
     >
         {items.length > 0 ? (
-            items.map(item => (<TextItem key={item.id} {...item} />))
+            items.map(item => (<TextItem key={item.id} onClick={onItemClick} {...item} />))
         ) : <Empty />}
     </Card>)
 }
