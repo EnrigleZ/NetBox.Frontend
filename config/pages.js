@@ -13,6 +13,7 @@ exports.pages = [
         title: 'Course Presentation Order',
         shortTitle: 'Course Order',
         name: 'course-order',
+        hidden: true,
     },
     {
         title: 'A Test Page',
@@ -30,5 +31,6 @@ exports.pages = [
         title: 'Clipboard',
         name: 'clipboard',
         entry: 'clipboard.html',
+        hidden: true,
     }
 ]

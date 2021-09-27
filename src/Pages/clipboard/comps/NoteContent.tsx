@@ -7,12 +7,12 @@ const NoteContent: React.FunctionComponent<any> = (props) => {
     const button = (<Button onClick={onReturn}>Back</Button>);
     const imageUrls = note?.image_ids?.map((id: string) => `/api/image/image?id=${id}`);
 
-    React.useEffect(() => {
-        document.addEventListener('keydown', onReturn, false);
-        return () => {
-            document.removeEventListener('keydown', onReturn, false);
-        }
-    })
+    // React.useEffect(() => {
+    //     document.addEventListener('keydown', onReturn, false);
+    //     return () => {
+    //         document.removeEventListener('keydown', onReturn, false);
+    //     }
+    // })
 
     if (!note) return <></>
     return (<Card title="Note Content" extra={button}>
