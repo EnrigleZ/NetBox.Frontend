@@ -8,6 +8,8 @@ const ImageModal: React.FunctionComponent<IImageModalProps> = (props) => {
     const [width, setWidth] = React.useState<number>(520);
 
     const imageUrl = React.useMemo(() => urls[index], [index]);
+    const modalTitle = React.useMemo(() => `View Image (${index + 1}/${urls.length})`, [index, urls]);
+
     const onImageLoad = React.useCallback((e: any) => {
         const imageElement: HTMLImageElement = e.target;
         const w = imageElement.naturalWidth;
@@ -29,7 +31,7 @@ const ImageModal: React.FunctionComponent<IImageModalProps> = (props) => {
 
     return (<Modal
         visible={display}
-        title="View Image"
+        title={modalTitle}
         onCancel={() => { onClose(); }}
         closable
         footer={null}
