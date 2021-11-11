@@ -32,5 +32,10 @@ exports.pages = [
         name: 'clipboard',
         entry: 'clipboard.html',
         hidden: true,
+    },
+    {
+        title: 'Commit Dashboard',
+        name: 'commit-dashboard',
+        entry: 'commit-dashboard.html',
     }
 ]
